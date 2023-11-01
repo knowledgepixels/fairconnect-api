@@ -16,6 +16,7 @@ select ?np ?label ?date ?type where {
         npa:hasValidSignatureForPublicKey ?pubkey ;
         dct:created ?date .
     optional { ?np npx:hasNanopubType ?type . }
+    filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
   }
   ?np search:matches [
     search:query ?_query;
