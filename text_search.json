@@ -8,7 +8,8 @@
       }
   },
   "$where": [
-    "graph npa:graph {\n  ?np rdfs:label ?label ;\n      npa:hasValidSignatureForPublicKey ?pubkey ;\n      dct:created ?date .\n  optional { ?np npx:hasNanopubType ?type . }\n}\n?np search:matches [\n  search:query \"fair\";\n  search:property rdfs:label;\n  search:score ?score;\n   search:snippet ?snippet ] .\n"
+    "graph npa:graph { ?np rdfs:label ?label }",
+    "graph npa:graph { ?np npa:hasValidSignatureForPublicKey ?pubkey }"
   ],
   "grlc": "#+ summary: Text search for FAIR Connect\n#+ endpoint: https://query.np.trustyuri.net/repo/text\n#+ tags:\n#+   - json\n#+ method: GET\n#+ pagination: 50",
   "$prefixes": {
