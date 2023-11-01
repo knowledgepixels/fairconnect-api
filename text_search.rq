@@ -18,7 +18,7 @@ select ?np ?label ?date ?type where {
     optional { ?np npx:hasNanopubType ?type . }
   }
   ?np search:matches [
-    search:query "a";
+    search:query ?_query;
     search:property rdfs:label;
     search:score ?score;
     search:snippet ?snippet ] .
