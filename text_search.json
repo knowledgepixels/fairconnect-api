@@ -1,8 +1,8 @@
 {
   "proto": {
       "id": "?np",
-      "label": "?label"
-      "date": "?date"
+      "label": "?label",
+      "date": "?date",
       "type": {
         "id": "?type"
       }
