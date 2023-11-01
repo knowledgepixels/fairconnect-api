@@ -16,8 +16,9 @@ select ?np ?label ?date (group_concat(distinct ?type; separator=" ") as ?types) 
         npa:hasValidSignatureForPublicKey ?pubkey ;
         dct:created ?date .
     filter(strends(str(?date), "Z"))
-    optional { ?np npx:hasNanopubType ?__type_iri . }
-    bind(?__type_iri as ?type)
+    filter exists { ?np npx:hasNanopubType ?__type_iri . }
+    filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
+    ?np npx:hasNanopubType ?type .
     filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
   }
   ?np search:matches [
