@@ -10,7 +10,7 @@ prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 prefix dct: <http://purl.org/dc/terms/>
 prefix search: <http://www.openrdf.org/contrib/lucenesail#>
 
-select ?np ?label ?date (group_concat(?snippet; separator="<BR>") as ?snippets) (group_concat(?type; separator=" ") as ?types) where {
+select ?np ?label ?date (group_concat(distinct ?snippet; separator="<BR>") as ?snippets) (group_concat(distinct ?type; separator=" ") as ?types) where {
   graph npa:graph {
     ?np rdfs:label ?label ;
         npa:hasValidSignatureForPublicKey ?pubkey ;
