@@ -14,7 +14,7 @@ select distinct ?np ?label ?date (group_concat(distinct ?type; separator=" ") as
   graph npa:graph {
     ?np rdfs:label ?label ;
         npa:hasValidSignatureForPublicKey ?pubkey ;
-        dct:created ?date ,
+        dct:created ?date ;
         dct:creator ?__creator_iri .
     filter(strends(str(?date), "Z"))
     filter exists { ?np npx:hasNanopubType ?__type_iri . }
