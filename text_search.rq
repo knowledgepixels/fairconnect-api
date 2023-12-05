@@ -30,4 +30,3 @@ select distinct ?np ?label ?date (group_concat(distinct ?type; separator=" ") as
 }
 group by ?np ?label ?date
 order by desc(?maxscore)
-limit 20
