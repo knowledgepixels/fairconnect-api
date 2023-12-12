@@ -15,8 +15,7 @@ select distinct ?np ?description ?label ?date (group_concat(distinct ?type; sepa
   graph npa:graph {
     ?np rdfs:label ?label ;
         npa:hasValidSignatureForPublicKey ?pubkey ;
-        dct:created ?date ;
-        dct:creator ?__creator_iri .
+        dct:created ?date .
     filter(strends(str(?date), "Z"))
     filter exists { ?np npx:hasNanopubType fip:FAIR-Enabling-Resource . }
     filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
