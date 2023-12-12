@@ -1,0 +1,30 @@
+#+ summary: Get types of FAIR-Enabling Resources
+#+ endpoint: https://query.knowledgepixels.com/repo/type/PvWxFVHrxE409LymFLOHIERHZWzhlTFFMnacp7IBQ_4
+#+ method: GET
+
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix np: <http://www.nanopub.org/nschema#>
+prefix npa: <http://purl.org/nanopub/admin/>
+prefix npx: <http://purl.org/nanopub/x/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix dct: <http://purl.org/dc/terms/>
+prefix fip: <https://w3id.org/fair/fip/terms/>
+
+select ?type (count(distinct ?np) as ?count) where {
+  graph npa:graph {
+    ?np npa:hasValidSignatureForPublicKey ?pubkey ;
+      npx:hasNanopubType fip:FAIR-Enabling-Resource .
+    filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
+    filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
+    ?np npx:hasNanopubType ?type .
+    filter(?type != fip:FAIR-Enabling-Resource)
+    filter(?type != fip:Available-FAIR-Enabling-Resource)
+    filter(?type != fip:FAIR-Enabling-Resource-to-be-Developed)
+    filter(?type != fip:FAIR-Supporting-Resource)
+    filter(?type != fip:Available-FAIR-Supporting-Resource)
+    filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
+    filter(regex(str(?type), '^http'))
+  }
+}
+group by ?type
+order by desc(?count)
