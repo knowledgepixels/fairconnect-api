@@ -1,0 +1,29 @@
+#+ summary: Get the domains of FAIR Implementation Communities
+#+ endpoint: https://query.knowledgepixels.com/repo/type/agl0eGivyDg3440brHk2L7zD4gMs_y8tJE9OJMvQhcY/
+#+ method: GET
+
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix np: <http://www.nanopub.org/nschema#>
+prefix npa: <http://purl.org/nanopub/admin/>
+prefix npx: <http://purl.org/nanopub/x/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix dct: <http://purl.org/dc/terms/>
+prefix fip: <https://w3id.org/fair/fip/terms/>
+
+select ?domain (count(distinct ?np) as ?count) where {
+  graph npa:graph {
+    ?np npa:hasValidSignatureForPublicKey ?pubkey ;
+      npx:hasNanopubType fip:FAIR-Implementation-Community ;
+      np:hasAssertion ?a .
+    filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
+    filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
+  }
+  graph ?a {
+    ?community a fip:FAIR-Implementation-Community ;
+      rdfs:label ?label ;
+      rdfs:comment ?comment ;
+      fip:has-research-domain ?domain .
+  }
+}
+group by ?domain
+order by desc(?count)
