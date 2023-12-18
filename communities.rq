@@ -1,5 +1,5 @@
 #+ summary: Get FAIR Implementation Communities
-#+ endpoint: https://query.knowledgepixels.com/repo/type/agl0eGivyDg3440brHk2L7zD4gMs_y8tJE9OJMvQhcY/
+#+ endpoint: https://query.knowledgepixels.com/repo/type/agl0eGivyDg3440brHk2L7zD4gMs_y8tJE9OJMvQhcY
 #+ method: GET
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
