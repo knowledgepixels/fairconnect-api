@@ -1,0 +1,34 @@
+#+ summary: Get info about a particular FAIR Implementation Profile
+#+ method: GET
+#+ endpoint: https://query.knowledgepixels.com/repo/type/SthF6GCm2zppFgrbeuyJTmIigP-YgeQaYAdWrRq8-iM
+#            (https://w3id.org/fair/fip/terms/FIP-Declaration)
+
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix np: <http://www.nanopub.org/nschema#>
+prefix npa: <http://purl.org/nanopub/admin/>
+prefix npx: <http://purl.org/nanopub/x/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix dct: <http://purl.org/dc/terms/>
+prefix fip: <https://w3id.org/fair/fip/terms/>
+
+select distinct ?community ?use ?resource ?question ?considerations where {
+  service <https://query.knowledgepixels.com/repo/type/GMUALeK6SJ-BpFkS9uaEEhVmz3fJNxxVS8O25qWOHQk> {  # (http://purl.org/nanopub/x/NanopubIndex)
+    graph npa:networkGraph {
+      ?_fip_index_iri npx:includesElement ?decl_np .
+    }
+  }
+  graph npa:graph {
+    ?decl_np np:hasAssertion ?decl_a .
+  }
+  graph ?decl_a {
+    ?decl a fip:FIP-Declaration .
+    values ?use { fip:declares-current-use-of fip:declares-planned-use-of fip:declares-planned-development-of fip:declares-planned-replacement-of }
+    ?decl ?use ?resource .
+    ?decl fip:refers-to-question ?question .
+    ?decl fip:declared-by ?community .
+    ?decl fip:considerations ?considerations .
+  }
+  bind(concat(replace(replace(str(?question), "^.*-([^-MD]+(-[MD]+)?)$", "$1"), "F|M", "0"), "x") as ?sort)
+}
+group by ?community ?use ?resource ?question ?considerations ?sort
+order by ?sort
