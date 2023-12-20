@@ -1,4 +1,4 @@
-#+ summary: Full-text search for FAIR-Enabling Resources
+#+ summary: Full-text search for FAIR Implementation Profiles
 #+ endpoint: https://query.knowledgepixels.com/repo/text
 #+ method: GET
 
@@ -24,7 +24,7 @@ select distinct ?np ?label ?date ?qualifier (max(?score) as ?maxscore) where {
   }
   ?np search:matches [
     search:query ?_query ;
-    search:property rdfs:label ;
+    search:property ?property ;
     search:score ?score ;
     search:snippet ?snippet ] .
   optional { service <https://query.knowledgepixels.com/repo/type/zVGjrD4Qn9EqrNWjJOFOv_ZEziCckW5CUKP1DC3fAFE> {  # (http://purl.org/nanopub/x/qualifies)
