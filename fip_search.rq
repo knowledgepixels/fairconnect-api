@@ -15,9 +15,9 @@ select distinct ?np ?description ?label ?date (group_concat(distinct ?type; sepa
     ?np rdfs:label ?label ;
         npa:hasValidSignatureForPublicKey ?pubkey ;
         dct:created ?date ;
-        dct:creator ?__creator_iri .
+        dct:creator <https://fip-wizard.ds-wizard.org> .
     filter(strends(str(?date), "Z"))
-    filter exists { ?np npx:hasNanopubType ?__type_iri . }
+    filter exists { ?np npx:hasNanopubType npx:NanopubIndex . }
     filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
     ?np npx:hasNanopubType ?type .
     filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
@@ -35,9 +35,9 @@ select distinct ?np ?description ?label ?date (group_concat(distinct ?type; sepa
     }
   } }
   ?np search:matches [
-    search:query ?_query;
-    search:property rdfs:label; #npa:hasLiteral;
-    search:score ?score;
+    search:query ?_query ;
+    search:property rdfs:label ;
+    search:score ?score ;
     search:snippet ?snippet ] .
 }
 group by ?np ?description ?label ?date
