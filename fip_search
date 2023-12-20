@@ -1,0 +1,44 @@
+#+ summary: Text search for FAIR Connect
+#+ endpoint: https://query.knowledgepixels.com/repo/text
+#+ method: GET
+
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix np: <http://www.nanopub.org/nschema#>
+prefix npa: <http://purl.org/nanopub/admin/>
+prefix npx: <http://purl.org/nanopub/x/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix dct: <http://purl.org/dc/terms/>
+prefix search: <http://www.openrdf.org/contrib/lucenesail#>
+
+select distinct ?np ?description ?label ?date (group_concat(distinct ?type; separator=" ") as ?types) (max(?score) as ?maxscore) where {
+  graph npa:graph {
+    ?np rdfs:label ?label ;
+        npa:hasValidSignatureForPublicKey ?pubkey ;
+        dct:created ?date ;
+        dct:creator ?__creator_iri .
+    filter(strends(str(?date), "Z"))
+    filter exists { ?np npx:hasNanopubType ?__type_iri . }
+    filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
+    ?np npx:hasNanopubType ?type .
+    filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
+  }
+  optional { service <https://query.knowledgepixels.com/repo/full> {
+    graph npa:graph {
+      ?np np:hasAssertion ?a .
+      ?np np:hasPublicationInfo ?i .
+    }
+    graph ?a {
+      ?thing rdfs:comment ?description .
+    }
+    graph ?i {
+      ?np npx:introduces ?thing .
+    }
+  } }
+  ?np search:matches [
+    search:query ?_query;
+    search:property rdfs:label; #npa:hasLiteral;
+    search:score ?score;
+    search:snippet ?snippet ] .
+}
+group by ?np ?description ?label ?date
+order by desc(?maxscore)
