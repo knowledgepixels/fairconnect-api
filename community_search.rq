@@ -34,7 +34,7 @@ select distinct ?np ?label ?comment ?date (group_concat(distinct ?domain; separa
         rdfs:comment ?comment ;
         fip:has-research-domain ?domain .
     }
-  }
+  } }
   optional { service <https://query.knowledgepixels.com/repo/type/zVGjrD4Qn9EqrNWjJOFOv_ZEziCckW5CUKP1DC3fAFE> {  # (http://purl.org/nanopub/x/qualifies)
     graph npa:graph {
       ?qualification_np np:hasAssertion ?qa ;
