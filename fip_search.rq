@@ -36,7 +36,7 @@ select distinct ?np ?description ?label ?date (group_concat(distinct ?type; sepa
   } }
   ?np search:matches [
     search:query ?_query ;
-    search:property rdfs:label ;
+    search:property ?property ;
     search:score ?score ;
     search:snippet ?snippet ] .
 }
