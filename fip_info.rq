@@ -14,7 +14,7 @@ prefix fip: <https://w3id.org/fair/fip/terms/>
 select distinct ?community ?use ?resource ?question ?considerations where {
   service <https://query.knowledgepixels.com/repo/type/GMUALeK6SJ-BpFkS9uaEEhVmz3fJNxxVS8O25qWOHQk> {  # (http://purl.org/nanopub/x/NanopubIndex)
     graph npa:networkGraph {
-      ?_fip_i_iri npx:includesElement ?decl_np .
+      ?_fipindex_iri npx:includesElement ?decl_np .
     }
   }
   graph npa:graph {
