@@ -11,7 +11,7 @@ prefix dct: <http://purl.org/dc/terms/>
 prefix fip: <https://w3id.org/fair/fip/terms/>
 prefix search: <http://www.openrdf.org/contrib/lucenesail#>
 
-select distinct ?np ?description ?label ?date (group_concat(distinct ?type; separator=" ") as ?types) ?qualifier (max(?score) as ?maxscore) where {
+select distinct ?np ?description ?label ?date (group_concat(distinct ?type; separator=" ") as ?types) ?qualifier (group_concat(distinct ?community; separator=" ") as ?communities) (max(?score) as ?maxscore) where {
   graph npa:graph {
     ?np rdfs:label ?label ;
         npa:hasValidSignatureForPublicKey ?pubkey ;
@@ -63,6 +63,22 @@ select distinct ?np ?description ?label ?date (group_concat(distinct ?type; sepa
     }
     graph ?da {
       ?disapprover npx:disapprovesOf ?np .
+    }
+  } }
+  optional { service <https://query.knowledgepixels.com/repo/type/SthF6GCm2zppFgrbeuyJTmIigP-YgeQaYAdWrRq8-iM> {  # (https://w3id.org/fair/fip/terms/FIP-Declaration)
+    graph npa:graph {
+      ?decl_np np:hasAssertion ?decl_a ;
+        npa:hasValidSignatureForPublicKey ?decl_pubkey .
+      filter not exists { ?decl_npx npx:invalidates ?decl_np ; npa:hasValidSignatureForPublicKey ?decl_pubkey . }
+    }
+    graph ?decl_a {
+      ?decl a fip:FIP-Declaration .
+      # ----
+      # not really needed but seems to make query faster:
+      values ?use { fip:declares-current-use-of fip:declares-planned-use-of fip:declares-planned-development-of fip:declares-planned-replacement-of }
+      ?decl ?use ?thing .
+      # ----
+      ?decl fip:declared-by ?community .
     }
   } }
 }
