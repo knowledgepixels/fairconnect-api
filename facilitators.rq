@@ -1,0 +1,29 @@
+#+ summary: Get the list of all GO FAIR facilitators
+#+ endpoint: https://query.knowledgepixels.com/type/FvtqOPIXMPRD9vx8SnNApUNklzoLB420lyBqE_xdM_Q
+#+ method: GET
+
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix np: <http://www.nanopub.org/nschema#>
+prefix npa: <http://purl.org/nanopub/admin/>
+prefix npx: <http://purl.org/nanopub/x/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix dct: <http://purl.org/dc/terms/>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+
+select distinct ?facilitatorName ?facilitatorId ?pubkey where {
+  graph <https://w3id.org/np/RAB1C3avoJ2dNztf68MyU5hyyykf2MEiyUc2lMKq_0OTA#assertion> {
+    ?pubkeys npx:hasPublicKey ?pubkey .
+  }
+  service <https://query.knowledgepixels.com/repo/type/d3V8q_YYTFHCC4sP5dxeE2W39ihEgzUYStVDGaCv_fw> {
+    graph npa:graph {
+      ?np npa:hasValidSignatureForPublicKey ?pubkey ;
+        np:hasAssertion ?a .
+      filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
+    }
+    graph ?a {
+      ?decl npx:hasPublicKey ?pubkey ;
+        npx:declaredBy ?facilitatorId .
+      ?facilitatorId foaf:name ?facilitatorName .
+    }
+  }
+}
