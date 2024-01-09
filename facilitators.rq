@@ -1,5 +1,5 @@
 #+ summary: Get the list of all GO FAIR facilitators
-#+ endpoint: https://query.knowledgepixels.com/type/FvtqOPIXMPRD9vx8SnNApUNklzoLB420lyBqE_xdM_Q
+#+ endpoint: https://query.knowledgepixels.com/repo/type/FvtqOPIXMPRD9vx8SnNApUNklzoLB420lyBqE_xdM_Q
 #+ method: GET
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
