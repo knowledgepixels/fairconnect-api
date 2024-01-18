@@ -36,7 +36,7 @@ select distinct ?np ?label ?description ?community ?date ?qualifier (max(?score)
     }
   } }
   ?np search:matches [
-    search:query "fip" ;
+    search:query ?_query ;
     search:property rdfs:label ;
     search:score ?score ;
     search:snippet ?snippet ] .
