@@ -37,7 +37,7 @@ select distinct ?np ?label ?description ?community ?date ?qualifier (max(?score)
   } }
   ?np search:matches [
     search:query ?_query ;
-    search:property ?property ;
+    search:property npa:hasLiteral ;
     search:score ?score ;
     search:snippet ?snippet ] .
   optional { service <https://query.knowledgepixels.com/repo/type/zVGjrD4Qn9EqrNWjJOFOv_ZEziCckW5CUKP1DC3fAFE> {  # (http://purl.org/nanopub/x/qualifies)
