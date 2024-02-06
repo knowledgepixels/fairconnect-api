@@ -46,7 +46,7 @@ select distinct ?np ?label ?description ?community ?date ?qualifier (max(?score)
         npa:hasValidSignatureForPublicKey ?qpubkey .
       filter not exists { ?qualification_npx npx:invalidates ?qualification_np ; npa:hasValidSignatureForPublicKey ?qpubkey . }
     }
-    graph <https://w3id.org/np/RAIVAIlNjyRrAJqUFfhitR8K4LyYVxi7UzIpHl_ld7fjk#assertion> {
+    graph <https://w3id.org/np/RAch-9UATp3EcTEPSGoMO7Rxy_KKpVxSobPkwhU-nb7oE#assertion> {
       ?qpubkeys npx:hasPublicKey ?qpubkey .
     }
     graph ?qa {
@@ -59,7 +59,7 @@ select distinct ?np ?label ?description ?community ?date ?qualifier (max(?score)
         npa:hasValidSignatureForPublicKey ?dpubkey .
       filter not exists { ?disapproval_npx npx:invalidates ?disapproval_np ; npa:hasValidSignatureForPublicKey ?dpubkey . }
     }
-    graph <https://w3id.org/np/RAIVAIlNjyRrAJqUFfhitR8K4LyYVxi7UzIpHl_ld7fjk#assertion> {
+    graph <https://w3id.org/np/RAch-9UATp3EcTEPSGoMO7Rxy_KKpVxSobPkwhU-nb7oE#assertion> {
       ?qpubkeys npx:hasPublicKey ?dpubkey .
     }
     graph ?da {
