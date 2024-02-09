@@ -41,7 +41,7 @@ select distinct ?np ?label ?comment ?date (group_concat(distinct ?domain; separa
         npa:hasValidSignatureForPublicKey ?qpubkey .
       filter not exists { ?qualification_npx npx:invalidates ?qualification_np ; npa:hasValidSignatureForPublicKey ?qpubkey . }
     }
-    graph <https://w3id.org/np/RAch-9UATp3EcTEPSGoMO7Rxy_KKpVxSobPkwhU-nb7oE#assertion> {
+    graph <https://w3id.org/np/RAmCO192cYgaaXh5tr5ycf56VZ73Fl6Heq6ykntevM_dU#assertion> {
       ?qpubkeys npx:hasPublicKey ?qpubkey .
     }
     graph ?qa {
@@ -54,7 +54,7 @@ select distinct ?np ?label ?comment ?date (group_concat(distinct ?domain; separa
         npa:hasValidSignatureForPublicKey ?dpubkey .
       filter not exists { ?disapproval_npx npx:invalidates ?disapproval_np ; npa:hasValidSignatureForPublicKey ?dpubkey . }
     }
-    graph <https://w3id.org/np/RAch-9UATp3EcTEPSGoMO7Rxy_KKpVxSobPkwhU-nb7oE#assertion> {
+    graph <https://w3id.org/np/RAmCO192cYgaaXh5tr5ycf56VZ73Fl6Heq6ykntevM_dU#assertion> {
       ?qpubkeys npx:hasPublicKey ?dpubkey .
     }
     graph ?da {
