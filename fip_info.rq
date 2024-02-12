@@ -11,12 +11,10 @@ prefix dct: <http://purl.org/dc/terms/>
 prefix fip: <https://w3id.org/fair/fip/terms/>
 
 select distinct ?fip_label ?decl_np ?question ?declares_pred ?fer where {
-  { select ?fip_label ?index_np where {
+  { select ?index_np where {
     service <https://query.knowledgepixels.com/repo/type/ku_XoOpL5OAewIF8zsh_l1IDswrdzDFmogRJj_7XO2Y> {  # fip:FAIR-Implementation-Profile
       graph npa:graph {
-        ?_fip_np_iri rdfs:label ?fip_label ;
-          npa:hasValidSignatureForPublicKey ?pubkey ;
-          npx:hasNanopubType fip:FAIR-Implementation-Profile ;
+        ?_fipnp_iri npx:hasNanopubType fip:FAIR-Implementation-Profile ;
           np:hasAssertion ?assertion .
       }
       graph ?assertion {
