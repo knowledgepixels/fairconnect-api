@@ -1,7 +1,6 @@
 #+ summary: Get info about a particular FAIR Implementation Profile
 #+ method: GET
-#+ endpoint: https://query.knowledgepixels.com/repo/type/SthF6GCm2zppFgrbeuyJTmIigP-YgeQaYAdWrRq8-iM
-#            (https://w3id.org/fair/fip/terms/FIP-Declaration)
+#+ endpoint: https://query.knowledgepixels.com/repo/empty
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix np: <http://www.nanopub.org/nschema#>
@@ -11,24 +10,44 @@ prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 prefix dct: <http://purl.org/dc/terms/>
 prefix fip: <https://w3id.org/fair/fip/terms/>
 
-select distinct ?community ?use ?resource ?question ?considerations where {
-  service <https://query.knowledgepixels.com/repo/type/GMUALeK6SJ-BpFkS9uaEEhVmz3fJNxxVS8O25qWOHQk> {  # (http://purl.org/nanopub/x/NanopubIndex)
-    graph npa:networkGraph {
-      ?_fipindex_iri npx:includesElement ?decl_np .
+select distinct ?fip_label ?decl_np ?question ?declares_pred ?fer where {
+  { select ?fip_label ?index_np where {
+    service <https://query.knowledgepixels.com/repo/type/ku_XoOpL5OAewIF8zsh_l1IDswrdzDFmogRJj_7XO2Y> {  # fip:FAIR-Implementation-Profile
+      graph npa:graph {
+        ?_fip_np_iri rdfs:label ?fip_label ;
+          npa:hasValidSignatureForPublicKey ?pubkey ;
+          npx:hasNanopubType fip:FAIR-Implementation-Profile ;
+          np:hasAssertion ?assertion .
+      }
+      graph ?assertion {
+        ?fip a fip:FAIR-Implementation-Profile ;
+          fip:has-declaration-index ?index_np .
+      }
     }
-  }
-  graph npa:graph {
-    ?decl_np np:hasAssertion ?decl_a .
-  }
-  graph ?decl_a {
-    ?decl a fip:FIP-Declaration .
-    values ?use { fip:declares-current-use-of fip:declares-planned-use-of fip:declares-planned-development-of fip:declares-planned-replacement-of }
-    ?decl ?use ?resource .
-    ?decl fip:refers-to-question ?question .
-    ?decl fip:declared-by ?community .
-    ?decl fip:considerations ?considerations .
-  }
+  } }
+  { select ?index_np ?decl_np where {
+    service <https://query.knowledgepixels.com/repo/type/GMUALeK6SJ-BpFkS9uaEEhVmz3fJNxxVS8O25qWOHQk> { # npx:NanopubIndex
+      graph npa:graph {
+        ?index_np np:hasAssertion ?assertion .
+        ?index_np npx:hasNanopubType npx:NanopubIndex .
+      }
+      graph ?assertion {
+        ?index_np npx:includesElement ?decl_np .
+      }
+    }
+  } }
+  { select ?decl_np ?question ?declares_pred ?fer where {
+    service <https://query.knowledgepixels.com/repo/type/SthF6GCm2zppFgrbeuyJTmIigP-YgeQaYAdWrRq8-iM> { # fip:FIP-Declaration
+      graph npa:graph {
+        ?decl_np np:hasAssertion ?assertion .
+        ?decl_np npx:hasNanopubType fip:FIP-Declaration .
+      }
+      graph ?assertion {
+        ?subj fip:refers-to-question ?question .
+        values ?declares_pred { fip:declares-current-use-of fip:declares-planned-use-of fip:declares-planned-development-of fip:declares-planned-replacement-of }
+        ?subj ?declares_pred ?fer .
+      }
+    }
+  } }
   bind(concat(replace(replace(str(?question), "^.*-([^-MD]+(-[MD]+)?)$", "$1"), "F|M", "0"), "x") as ?sort)
-}
-group by ?community ?use ?resource ?question ?considerations ?sort
-order by ?sort
+} order by ?sort
