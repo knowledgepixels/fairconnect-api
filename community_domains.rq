@@ -15,6 +15,7 @@ select ?domain ?domainlabel (count(distinct ?np) as ?count) where {
     ?np npa:hasValidSignatureForPublicKey ?pubkey ;
       npx:hasNanopubType fip:FAIR-Implementation-Community ;
       np:hasAssertion ?a .
+    ?np dct:created ?date . filter(str(?date) > "2022")
     filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
     filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
   }
