@@ -18,6 +18,7 @@ select distinct ?np ?label ?comment ?date (group_concat(distinct ?domain; separa
       dct:created ?date ;
       npx:hasNanopubType fip:FAIR-Implementation-Community ;
       np:hasAssertion ?a .
+    ?np dct:created ?date . filter(str(?date) > "2022")
     filter(strends(str(?date), "Z"))
     filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
     filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
