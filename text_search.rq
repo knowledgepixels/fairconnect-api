@@ -16,7 +16,7 @@ select distinct ?np ?description ?label ?date (group_concat(distinct ?type; sepa
         npa:hasValidSignatureForPublicKey ?pubkey ;
         dct:created ?date ;
         dct:creator ?__creator_iri .
-    filter(strends(str(?date), "Z"))
+    filter(str(?date) > "2022")
     filter exists { ?np npx:hasNanopubType ?__type_iri . }
     filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
     ?np npx:hasNanopubType ?type .
