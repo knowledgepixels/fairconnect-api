@@ -14,6 +14,7 @@ select ?type (count(distinct ?np) as ?count) where {
   graph npa:graph {
     ?np npa:hasValidSignatureForPublicKey ?pubkey ;
       npx:hasNanopubType fip:FAIR-Enabling-Resource .
+    ?np dct:created ?date . filter(str(?date) > "2022")
     filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
     filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
     ?np npx:hasNanopubType ?type .
