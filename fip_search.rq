@@ -16,7 +16,6 @@ select distinct ?np ?label ?description ?community ?date ?qualifier (max(?score)
     ?np rdfs:label ?label ;
         npa:hasValidSignatureForPublicKey ?pubkey ;
         dct:created ?date .
-    filter(strends(str(?date), "Z"))
     filter exists { ?np npx:hasNanopubType fip:FAIR-Implementation-Profile . }
     filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
     filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
