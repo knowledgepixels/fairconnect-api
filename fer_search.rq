@@ -15,7 +15,7 @@ prefix search: <http://www.openrdf.org/contrib/lucenesail#>
 
 select distinct ?np ?description ?label ?date (group_concat(distinct ?type; separator=" ") as ?types) ?qualifier (group_concat(distinct ?community; separator=" ") as ?communities) (max(?score) as ?maxscore) where {
 
-  bind(?service_iri as ?service)
+  bind(?_service_iri as ?service)
   bind(iri(concat(str(?service), "repo/text")) as ?text_service)
 
   service ?text_service {
