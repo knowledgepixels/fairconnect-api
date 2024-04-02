@@ -1,6 +1,8 @@
 #+ summary: Get types of FAIR-Enabling Resources
-#+ endpoint: https://query.knowledgepixels.com/repo/type/PvWxFVHrxE409LymFLOHIERHZWzhlTFFMnacp7IBQ_4
+#+ endpoint: https://nanopub.sdsc.edu/repo/empty
 #+ method: GET
+#+ defaults:
+#+   - service: https://nanopub.sdsc.edu/
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix np: <http://www.nanopub.org/nschema#>
@@ -11,21 +13,54 @@ prefix dct: <http://purl.org/dc/terms/>
 prefix fip: <https://w3id.org/fair/fip/terms/>
 
 select ?type (count(distinct ?np) as ?count) where {
-  graph npa:graph {
-    ?np npa:hasValidSignatureForPublicKey ?pubkey .
-    filter exists { ?np npx:hasNanopubType ?fsr_type . values ?fsr_type { fip:FAIR-Enabling-Resource fip:FAIR-Supporting-Resource } }
-    ?np dct:created ?date . filter(str(?date) > "2022")
-    filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
-    filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
-    ?np npx:hasNanopubType ?type .
-    filter(?type != fip:FAIR-Enabling-Resource)
-    filter(?type != fip:Available-FAIR-Enabling-Resource)
-    filter(?type != fip:FAIR-Enabling-Resource-to-be-Developed)
-    filter(?type != fip:FAIR-Supporting-Resource)
-    filter(?type != fip:Available-FAIR-Supporting-Resource)
-    filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
-    filter(regex(str(?type), '^http'))
+
+  optional {<x:> <x:> ?__service_iri}
+  bind(coalesce(?__service_iri, <https://nanopub.sdsc.edu/>) as ?service)
+
+  {
+
+  bind(iri(concat(str(?service), "repo/type/", sha256(str(fip:FAIR-Enabling-Resource)))) as ?fer_service)
+  service ?fer_service {
+    graph npa:graph {
+      ?np npa:hasValidSignatureForPublicKey ?pubkey ;
+        npx:hasNanopubType fip:FAIR-Enabling-Resource .
+      ?np dct:created ?date . filter(str(?date) > "2022")
+      filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
+      filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
+      ?np npx:hasNanopubType ?type .
+      filter(?type != fip:FAIR-Enabling-Resource)
+      filter(?type != fip:Available-FAIR-Enabling-Resource)
+      filter(?type != fip:FAIR-Enabling-Resource-to-be-Developed)
+      filter(?type != fip:FAIR-Supporting-Resource)
+      filter(?type != fip:Available-FAIR-Supporting-Resource)
+      filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
+      filter(regex(str(?type), '^http'))
+    }
   }
+
+  } union {
+
+  bind(iri(concat(str(?service), "repo/type/", sha256(str(fip:FAIR-Supporting-Resource)))) as ?fer_service)
+  service ?fer_service {
+    graph npa:graph {
+      ?np npa:hasValidSignatureForPublicKey ?pubkey ;
+        npx:hasNanopubType fip:FAIR-Supporting-Resource .
+      ?np dct:created ?date . filter(str(?date) > "2022")
+      filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
+      filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
+      ?np npx:hasNanopubType ?type .
+      filter(?type != fip:FAIR-Enabling-Resource)
+      filter(?type != fip:Available-FAIR-Enabling-Resource)
+      filter(?type != fip:FAIR-Enabling-Resource-to-be-Developed)
+      filter(?type != fip:FAIR-Supporting-Resource)
+      filter(?type != fip:Available-FAIR-Supporting-Resource)
+      filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
+      filter(regex(str(?type), '^http'))
+    }
+  }
+
+  }
+
 }
 group by ?type
 order by desc(?count)
