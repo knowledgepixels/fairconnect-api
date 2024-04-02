@@ -15,9 +15,9 @@ prefix search: <http://www.openrdf.org/contrib/lucenesail#>
 
 select distinct ?np ?description ?label ?date (group_concat(distinct ?type; separator=" ") as ?types) ?qualifier (group_concat(distinct ?community; separator=" ") as ?communities) (max(?score) as ?maxscore) where {
 
-  optional {<x:> <x:> ?_service_iri}
-  
-  bind(iri(concat(str(?_service_iri), "repo/text")) as ?text_service)
+ #optional {<x:> <x:> ?_service_iri}
+  bind(<https://nanopub.sdsc.edu/> as ?service)
+  bind(iri(concat(str(?service), "repo/text")) as ?text_service)
 
   service ?text_service {
     graph npa:graph {
@@ -37,7 +37,7 @@ select distinct ?np ?description ?label ?date (group_concat(distinct ?type; sepa
       search:snippet ?snippet ] .
   }
 
-  bind(iri(concat(str(?_service_iri), "repo/full")) as ?full_service)
+  bind(iri(concat(str(?service), "repo/full")) as ?full_service)
   optional { service ?full_service {
     graph npa:graph {
       ?np np:hasAssertion ?a .
@@ -51,7 +51,7 @@ select distinct ?np ?description ?label ?date (group_concat(distinct ?type; sepa
     }
   } }
   
-  bind(iri(concat(str(?_service_iri), "repo/type/", sha256("http://purl.org/nanopub/x/qualifies"))) as ?qualifies_service)
+  bind(iri(concat(str(service), "repo/type/", sha256("http://purl.org/nanopub/x/qualifies"))) as ?qualifies_service)
   optional { service ?qualifies_service {
     graph npa:graph {
       ?qualification_np np:hasAssertion ?qa ;
@@ -66,7 +66,7 @@ select distinct ?np ?description ?label ?date (group_concat(distinct ?type; sepa
     }
   } }
 
-  bind(iri(concat(str(?_service_iri), "repo/type/", sha256("http://purl.org/nanopub/x/disapprovesOf"))) as ?disappr_service)
+  bind(iri(concat(str(?service), "repo/type/", sha256("http://purl.org/nanopub/x/disapprovesOf"))) as ?disappr_service)
   filter not exists { service ?disappr_service {
     graph npa:graph {
       ?disapproval_np np:hasAssertion ?da ;
@@ -81,7 +81,7 @@ select distinct ?np ?description ?label ?date (group_concat(distinct ?type; sepa
     }
   } }
 
-  bind(iri(concat(str(?_service_iri), "repo/type/", sha256("https://w3id.org/fair/fip/terms/FIP-Declaration"))) as ?fip_service)
+  bind(iri(concat(str(?service), "repo/type/", sha256("https://w3id.org/fair/fip/terms/FIP-Declaration"))) as ?fip_service)
   optional { service ?fip_service {
     graph npa:graph {
       ?decl_np np:hasAssertion ?decl_a ;
