@@ -2,7 +2,7 @@
 #+ endpoint: https://nanopub.sdsc.edu/repo/empty
 #+ method: GET
 #+ defaults:
-#+   - service_iri: https://nanopub.sdsc.edu/
+#+   - service: https://nanopub.sdsc.edu/
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix np: <http://www.nanopub.org/nschema#>
