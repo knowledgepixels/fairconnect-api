@@ -1,8 +1,8 @@
 #+ summary: Full-text search for FAIR-Enabling Resources
 #+ endpoint: https://nanopub.sdsc.edu/repo/empty
 #+ method: GET
-###+ defaults:
-###+   - service: https://nanopub.sdsc.edu/
+#+ defaults:
+#+   - service: https://nanopub.sdsc.edu/
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix np: <http://www.nanopub.org/nschema#>
@@ -15,8 +15,8 @@ prefix search: <http://www.openrdf.org/contrib/lucenesail#>
 
 select distinct ?np ?description ?label ?date (group_concat(distinct ?type; separator=" ") as ?types) ?qualifier (group_concat(distinct ?community; separator=" ") as ?communities) (max(?score) as ?maxscore) where {
 
- #optional {<x:> <x:> ?_service_iri}
-  bind(<https://nanopub.sdsc.edu/> as ?service)
+  optional {<x:> <x:> ?_service_iri}
+  bind(?_service_iri as ?service)
   bind(iri(concat(str(?service), "repo/text")) as ?text_service)
 
   service ?text_service {
