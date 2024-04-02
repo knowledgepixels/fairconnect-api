@@ -17,7 +17,7 @@ select distinct ?np ?description ?label ?date (group_concat(distinct ?type; sepa
 
   optional {<x:> <x:> ?_service_iri}
   
-  bind(iri(concat(str(?service), "repo/text")) as ?text_service)
+  bind(iri(concat(str(?_service_iri), "repo/text")) as ?text_service)
 
   service ?text_service {
     graph npa:graph {
