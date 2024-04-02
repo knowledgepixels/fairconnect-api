@@ -12,8 +12,8 @@ prefix fip: <https://w3id.org/fair/fip/terms/>
 
 select ?type (count(distinct ?np) as ?count) where {
   graph npa:graph {
-    ?np npa:hasValidSignatureForPublicKey ?pubkey ;
-      npx:hasNanopubType fip:FAIR-Enabling-Resource .
+    ?np npa:hasValidSignatureForPublicKey ?pubkey .
+    filter exists { ?np npx:hasNanopubType ?fsr_type . values ?fsr_type { fip:FAIR-Enabling-Resource fip:FAIR-Supporting-Resource } }
     ?np dct:created ?date . filter(str(?date) > "2022")
     filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
     filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
