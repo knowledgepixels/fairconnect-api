@@ -51,7 +51,7 @@ select distinct ?np ?description ?label ?date (group_concat(distinct ?type; sepa
     }
   } }
   
-  bind(iri(concat(str(service), "repo/type/", sha256("http://purl.org/nanopub/x/qualifies"))) as ?qualifies_service)
+  bind(iri(concat(str(?service), "repo/type/", sha256("http://purl.org/nanopub/x/qualifies"))) as ?qualifies_service)
   optional { service ?qualifies_service {
     graph npa:graph {
       ?qualification_np np:hasAssertion ?qa ;
