@@ -100,5 +100,5 @@ select distinct ?t ?np ?description ?label ?date (group_concat(distinct ?type; s
   } }
 
 }
-group by ?np ?description ?label ?date ?qualifier
+group by ?np ?description ?label ?date ?qualifier ?t
 order by desc(?maxscore)
