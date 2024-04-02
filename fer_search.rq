@@ -1,8 +1,8 @@
 #+ summary: Full-text search for FAIR-Enabling Resources
 #+ endpoint: https://nanopub.sdsc.edu/repo/empty
 #+ method: GET
-#+ defaults:
-#+   - service: https://nanopub.sdsc.edu/
+###+ defaults:
+###+   - service: https://nanopub.sdsc.edu/
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix np: <http://www.nanopub.org/nschema#>
