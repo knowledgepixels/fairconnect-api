@@ -2,7 +2,7 @@
 #+ endpoint: https://nanopub.sdsc.edu/repo/empty
 #+ method: GET
 #+ defaults:
-#+   - service: https://nanopub.sdsc.edu/
+#+   - endpoint: https://nanopub.sdsc.edu/repo/empty
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix np: <http://www.nanopub.org/nschema#>
@@ -14,12 +14,13 @@ prefix fip: <https://w3id.org/fair/fip/terms/>
 
 select ?type (count(distinct ?np) as ?count) where {
 
-  optional {<x:> <x:> ?__service_iri}
-  bind(coalesce(?__service_iri, <https://nanopub.sdsc.edu/>) as ?service)
+  optional { <x:> <x:> ?__endpoint_iri } .
+  bind(coalesce(?__endpoint_iri, <https://nanopub.sdsc.edu/repo/empty>) as ?endpoint)
+  bind(replace(str(?endpoint), "repo/[a-zA-Z0-9]+$", "") as ?service)
 
   {
 
-  bind(iri(concat(str(?service), "repo/type/", sha256(str(fip:FAIR-Enabling-Resource)))) as ?fer_service)
+  bind(iri(concat(?service, "repo/type/", sha256(str(fip:FAIR-Enabling-Resource)))) as ?fer_service)
   service ?fer_service {
     graph npa:graph {
       ?np npa:hasValidSignatureForPublicKey ?pubkey ;
@@ -40,7 +41,7 @@ select ?type (count(distinct ?np) as ?count) where {
 
   } union {
 
-  bind(iri(concat(str(?service), "repo/type/", sha256(str(fip:FAIR-Supporting-Resource)))) as ?fer_service)
+  bind(iri(concat(?service, "repo/type/", sha256(str(fip:FAIR-Supporting-Resource)))) as ?fer_service)
   service ?fer_service {
     graph npa:graph {
       ?np npa:hasValidSignatureForPublicKey ?pubkey ;
