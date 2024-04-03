@@ -18,45 +18,45 @@ select ?type (count(distinct ?np) as ?count) where {
 
   {
 
-  bind(iri(concat(?service, "repo/type/", sha256(str(fip:FAIR-Enabling-Resource)))) as ?fer_service)
-  service ?fer_service {
-    graph npa:graph {
-      ?np npa:hasValidSignatureForPublicKey ?pubkey ;
-        npx:hasNanopubType fip:FAIR-Enabling-Resource .
-      ?np dct:created ?date . filter(str(?date) > "2022")
-      filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
-      filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
-      ?np npx:hasNanopubType ?type .
-      filter(?type != fip:FAIR-Enabling-Resource)
-      filter(?type != fip:Available-FAIR-Enabling-Resource)
-      filter(?type != fip:FAIR-Enabling-Resource-to-be-Developed)
-      filter(?type != fip:FAIR-Supporting-Resource)
-      filter(?type != fip:Available-FAIR-Supporting-Resource)
-      filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
-      filter(regex(str(?type), '^http'))
+    bind(iri(concat(?service, "repo/type/", sha256(str(fip:FAIR-Enabling-Resource)))) as ?fer_service)
+    service ?fer_service {
+      graph npa:graph {
+        ?np npa:hasValidSignatureForPublicKey ?pubkey ;
+          npx:hasNanopubType fip:FAIR-Enabling-Resource .
+        ?np dct:created ?date . filter(str(?date) > "2022")
+        filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
+        filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
+        ?np npx:hasNanopubType ?type .
+        filter(?type != fip:FAIR-Enabling-Resource)
+        filter(?type != fip:Available-FAIR-Enabling-Resource)
+        filter(?type != fip:FAIR-Enabling-Resource-to-be-Developed)
+        filter(?type != fip:FAIR-Supporting-Resource)
+        filter(?type != fip:Available-FAIR-Supporting-Resource)
+        filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
+        filter(regex(str(?type), '^http'))
+      }
     }
-  }
 
   } union {
 
-  bind(iri(concat(?service, "repo/type/", sha256(str(fip:FAIR-Supporting-Resource)))) as ?fer_service)
-  service ?fer_service {
-    graph npa:graph {
-      ?np npa:hasValidSignatureForPublicKey ?pubkey ;
-        npx:hasNanopubType fip:FAIR-Supporting-Resource .
-      ?np dct:created ?date . filter(str(?date) > "2022")
-      filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
-      filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
-      ?np npx:hasNanopubType ?type .
-      filter(?type != fip:FAIR-Enabling-Resource)
-      filter(?type != fip:Available-FAIR-Enabling-Resource)
-      filter(?type != fip:FAIR-Enabling-Resource-to-be-Developed)
-      filter(?type != fip:FAIR-Supporting-Resource)
-      filter(?type != fip:Available-FAIR-Supporting-Resource)
-      filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
-      filter(regex(str(?type), '^http'))
+    bind(iri(concat(?service, "repo/type/", sha256(str(fip:FAIR-Supporting-Resource)))) as ?fer_service)
+    service ?fer_service {
+      graph npa:graph {
+        ?np npa:hasValidSignatureForPublicKey ?pubkey ;
+          npx:hasNanopubType fip:FAIR-Supporting-Resource .
+        ?np dct:created ?date . filter(str(?date) > "2022")
+        filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
+        filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
+        ?np npx:hasNanopubType ?type .
+        filter(?type != fip:FAIR-Enabling-Resource)
+        filter(?type != fip:Available-FAIR-Enabling-Resource)
+        filter(?type != fip:FAIR-Enabling-Resource-to-be-Developed)
+        filter(?type != fip:FAIR-Supporting-Resource)
+        filter(?type != fip:Available-FAIR-Supporting-Resource)
+        filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
+        filter(regex(str(?type), '^http'))
+      }
     }
-  }
 
   }
 
