@@ -1,5 +1,5 @@
 #+ summary: Full-text search for FAIR-Enabling Resources
-#+ endpoint: https://nanopub.sdsc.edu/repo/empty
+#+ endpoint: https://query.np.trustyuri.net/repo/empty
 #+ method: GET
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
