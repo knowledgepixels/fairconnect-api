@@ -13,7 +13,7 @@ prefix fip: <https://w3id.org/fair/fip/terms/>
 select ?type (count(distinct ?np) as ?count) where {
 
   optional { <x:> <x:> ?__endpoint_iri } .
-  bind(coalesce(?__endpoint_iri, <https://nanopub.sdsc.edu/repo/empty>) as ?endpoint)
+  bind(coalesce(?__endpoint_iri, <https://query.np.trustyuri.net/repo/empty>) as ?endpoint)
   bind(replace(str(?endpoint), "repo/[a-zA-Z0-9]+$", "") as ?service)
 
   {
