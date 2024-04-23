@@ -32,6 +32,12 @@ select distinct ?np ?description ?label ?date ?types ?qualifier (group_concat(di
         filter exists { ?np npx:hasNanopubType ?fsr_type . values ?fsr_type { fip:FAIR-Enabling-Resource fip:FAIR-Supporting-Resource } }
         filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
         ?np npx:hasNanopubType ?type .
+        filter(?type != fip:FAIR-Enabling-Resource)
+        filter(?type != fip:Available-FAIR-Enabling-Resource)
+        filter(?type != fip:FAIR-Enabling-Resource-to-be-Developed)
+        filter(?type != fip:FAIR-Supporting-Resource)
+        filter(?type != fip:Available-FAIR-Supporting-Resource)
+        filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
         filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
       }
       ?np search:matches [
