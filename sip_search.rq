@@ -1,0 +1,70 @@
+#+ summary: Full-text search for Semantic Interoperability Profiles
+#+ endpoint: https://query.knowledgepixels.com/repo/text
+#+ method: GET
+
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix np: <http://www.nanopub.org/nschema#>
+prefix npa: <http://purl.org/nanopub/admin/>
+prefix npx: <http://purl.org/nanopub/x/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix dct: <http://purl.org/dc/terms/>
+prefix fip: <https://w3id.org/fair/fip/terms/>
+prefix search: <http://www.openrdf.org/contrib/lucenesail#>
+
+select distinct ?np ?label ?description ?community ?date ?qualifier (max(?score) as ?maxscore) where {
+  graph npa:graph {
+    ?np rdfs:label ?label ;
+        npa:hasValidSignatureForPublicKey ?pubkey ;
+        dct:created ?date .
+    filter exists { ?np npx:hasNanopubType fip:Semantic-Interoperability-Profile . }
+    filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
+    filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
+  }
+  optional { service <https://query.knowledgepixels.com/repo/full> {
+    graph npa:graph {
+      ?np np:hasAssertion ?a .
+      ?np np:hasPublicationInfo ?i .
+    }
+    graph ?a {
+      ?fip dct:description ?description .
+      ?fip fip:declared-by ?community .
+      
+    }
+    graph ?i {
+      ?np npx:introduces ?fip .
+    }
+  } }
+  ?np search:matches [
+    search:query ?_query ;
+    search:property npa:hasLiteral ;
+    search:score ?score ;
+    search:snippet ?snippet ] .
+  optional { service <https://query.knowledgepixels.com/repo/type/zVGjrD4Qn9EqrNWjJOFOv_ZEziCckW5CUKP1DC3fAFE> {  # (http://purl.org/nanopub/x/qualifies)
+    graph npa:graph {
+      ?qualification_np np:hasAssertion ?qa ;
+        npa:hasValidSignatureForPublicKey ?qpubkey .
+      filter not exists { ?qualification_npx npx:invalidates ?qualification_np ; npa:hasValidSignatureForPublicKey ?qpubkey . }
+    }
+    graph <https://w3id.org/np/RAkVk6aKWsmgcuKtPA7OSp2h-GbDfx8xrz_kJAAgY8Xa4#assertion> {
+      ?qpubkeys npx:hasPublicKey ?qpubkey .
+    }
+    graph ?qa {
+      ?qualifier npx:qualifies ?np .
+    }
+  } }
+  filter not exists { service <https://query.knowledgepixels.com/repo/type/OWkodtCniByC6aLLbciFn7Fvpp-0HOoqzi-PpwvFKu0> {  # (http://purl.org/nanopub/x/disapprovesOf)
+    graph npa:graph {
+      ?disapproval_np np:hasAssertion ?da ;
+        npa:hasValidSignatureForPublicKey ?dpubkey .
+      filter not exists { ?disapproval_npx npx:invalidates ?disapproval_np ; npa:hasValidSignatureForPublicKey ?dpubkey . }
+    }
+    graph <https://w3id.org/np/RAkVk6aKWsmgcuKtPA7OSp2h-GbDfx8xrz_kJAAgY8Xa4#assertion> {
+      ?qpubkeys npx:hasPublicKey ?dpubkey .
+    }
+    graph ?da {
+      ?disapprover npx:disapprovesOf ?np .
+    }
+  } }
+}
+group by ?np ?description ?label ?community ?date ?qualifier
+order by desc(?maxscore)
