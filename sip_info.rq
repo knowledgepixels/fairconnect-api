@@ -15,7 +15,7 @@ select distinct ?decl_np ?declares_pred ?fsr ?fsr_label where {
   { select ?index_np where {
     service <https://query.knowledgepixels.com/repo/type/LXqnourF1Ytc-SirXlpx7RvaAIRZQvJvwxZHxCx8WKM> {  # fip:Semantic-Interoperability-Profile
       graph npa:graph {
-        ?_fipnp_iri npx:hasNanopubType fip:Semantic-Interoperability-Profile ;
+        ?_sipnp_iri npx:hasNanopubType fip:Semantic-Interoperability-Profile ;
           np:hasAssertion ?assertion .
       }
       graph ?assertion {
@@ -48,11 +48,9 @@ select distinct ?decl_np ?declares_pred ?fsr ?fsr_label where {
     }
   } }
   optional { select distinct ?fsr (sample(?fsr_label_x) as ?fsr_label_pre) where {
-    service <https://query.knowledgepixels.com/repo/full> { # fip:FAIR-Enabling-Resource OR fip:FAIR-Supporting-Resource
+    service <https://query.knowledgepixels.com/repo/type/Bw-poPh6GJvC651MGhT2jxFTjMIim59P1qwCaj0s5XA> { # fip:FAIR-Supporting-Resource
       graph npa:graph {
-        values ?type { fip:FAIR-Enabling-Resource fip:FAIR-Supporting-Resource }
-        ?fsr_np npx:hasNanopubType ?type ;
-          npa:hasValidSignatureForPublicKey ?pubkey ;
+        ?fsr_np npa:hasValidSignatureForPublicKey ?pubkey ;
           np:hasAssertion ?assertion .
         filter not exists { ?fsr_npx npx:invalidates ?fsr_np ; npa:hasValidSignatureForPublicKey ?pubkey . }
       }
