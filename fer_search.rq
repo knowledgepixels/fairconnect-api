@@ -32,6 +32,7 @@ select distinct ?np ?description ?label ?date ?types ?qualifier (group_concat(di
         filter(str(?date) > "2022")
         filter exists { ?np npx:hasNanopubType ?fsr_type . values ?fsr_type { fip:FAIR-Enabling-Resource fip:FAIR-Supporting-Resource } }
         filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
+        ?np npx:hasNanopubType ?__type_iri .
         ?np npx:hasNanopubType ?type .
         filter(?type != fip:FAIR-Enabling-Resource)
         filter(?type != fip:Available-FAIR-Enabling-Resource)
