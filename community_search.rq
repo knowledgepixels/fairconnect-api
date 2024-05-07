@@ -1,5 +1,5 @@
 #+ summary: Full-text search for FAIR communities
-#+ endpoint: https://query.knowledgepixels.com/repo/text
+#+ endpoint: https://query.np.trustyuri.net/repo/text
 #+ method: GET
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -36,7 +36,7 @@ select distinct ?np ?label ?comment ?date (group_concat(distinct ?domain; separa
         fip:has-research-domain ?domain .
     }
   } }
-  optional { service <https://query.knowledgepixels.com/repo/type/zVGjrD4Qn9EqrNWjJOFOv_ZEziCckW5CUKP1DC3fAFE> {  # (http://purl.org/nanopub/x/qualifies)
+  optional { service <https://query.np.trustyuri.net/repo/type/cd51a3ac3e109fd12aacd5a324e14ebff644ce209c916e4250a3f50c2ddf0051> {  # (http://purl.org/nanopub/x/qualifies)
     graph npa:graph {
       ?qualification_np np:hasAssertion ?qa ;
         npa:hasValidSignatureForPublicKey ?qpubkey .
@@ -49,7 +49,7 @@ select distinct ?np ?label ?comment ?date (group_concat(distinct ?domain; separa
       ?qualifier npx:qualifies ?np .
     }
   } }
-  filter not exists { service <https://query.knowledgepixels.com/repo/type/OWkodtCniByC6aLLbciFn7Fvpp-0HOoqzi-PpwvFKu0> {  # (http://purl.org/nanopub/x/disapprovesOf)
+  filter not exists { service <https://query.np.trustyuri.net/repo/type/39692876d0a7881c82e9a2cb6dc8859fb16fa69fb41cea2ace2f8fa70bc52aed> {  # (http://purl.org/nanopub/x/disapprovesOf)
     graph npa:graph {
       ?disapproval_np np:hasAssertion ?da ;
         npa:hasValidSignatureForPublicKey ?dpubkey .
