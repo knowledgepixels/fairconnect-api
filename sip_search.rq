@@ -20,7 +20,7 @@ select distinct ?np ?label ?description ?community ?date ?qualifier (max(?score)
     filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
     filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
   }
-  optional { service <https://query.knowledgepixels.com/repo/full> {
+  optional { service <https://query.np.trustyuri.net/repo/full> {
     graph npa:graph {
       ?np np:hasAssertion ?a .
       ?np np:hasPublicationInfo ?i .
