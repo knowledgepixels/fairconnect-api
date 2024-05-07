@@ -28,7 +28,7 @@ select distinct ?np ?label ?comment ?date (group_concat(distinct ?domain; separa
     search:property ?property ;
     search:score ?score ;
     search:snippet ?snippet ] .
-  optional { service <https://query.knowledgepixels.com/repo/full> {
+  optional { service <https://query.np.trustyuri.net/repo/full> {
     graph ?a {
      ?community a fip:FAIR-Implementation-Community ;
         rdfs:label ?label ;
