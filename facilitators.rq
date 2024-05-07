@@ -1,5 +1,5 @@
 #+ summary: Get the list of all GO FAIR facilitators
-#+ endpoint: https://query.knowledgepixels.com/repo/type/FvtqOPIXMPRD9vx8SnNApUNklzoLB420lyBqE_xdM_Q
+#+ endpoint: https://query.np.trustyuri.net/repo/type/16fb6a38f21730f443f6fc7c4a7340a54364973a0b078db497206a13fc5d33f4
 #+ method: GET
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -14,7 +14,7 @@ select distinct ?facilitatorName ?facilitatorId ?pubkey where {
   graph <https://w3id.org/np/RAkVk6aKWsmgcuKtPA7OSp2h-GbDfx8xrz_kJAAgY8Xa4#assertion> {
     ?pubkeys npx:hasPublicKey ?pubkey .
   }
-  service <https://query.knowledgepixels.com/repo/type/d3V8q_YYTFHCC4sP5dxeE2W39ihEgzUYStVDGaCv_fw> {
+  service <https://query.np.trustyuri.net/repo/type/77757cabf6184c51c20b8b0fe5dc5e1365b7f628448335184ad54319a0affdfc> {  # (http://purl.org/nanopub/x/declaredBy)
     graph npa:graph {
       ?np npa:hasValidSignatureForPublicKey ?pubkey ;
         np:hasAssertion ?a .
