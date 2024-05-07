@@ -1,6 +1,6 @@
 #+ summary: Get info about a particular FAIR Implementation Profile
 #+ method: GET
-#+ endpoint: https://query.knowledgepixels.com/repo/empty
+#+ endpoint: https://query.np.trustyuri.net/repo/empty
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix np: <http://www.nanopub.org/nschema#>
@@ -12,7 +12,7 @@ prefix fip: <https://w3id.org/fair/fip/terms/>
 
 select distinct ?decl_np ?declares_pred ?fsr ?fsr_label where {
   { select ?index_np where {
-    service <https://query.knowledgepixels.com/repo/type/LXqnourF1Ytc-SirXlpx7RvaAIRZQvJvwxZHxCx8WKM> {  # fip:Semantic-Interoperability-Profile
+    service <https://query.np.trustyuri.net/repo/type/2d7aa7a2eac5d58b5cf928ab5e5a71ed1bda00845942f26fc31647c42c7c58a3> {  # fip:Semantic-Interoperability-Profile
       graph npa:graph {
         ?_sipnp_iri npx:hasNanopubType fip:Semantic-Interoperability-Profile ;
           np:hasAssertion ?assertion .
@@ -24,7 +24,7 @@ select distinct ?decl_np ?declares_pred ?fsr ?fsr_label where {
     }
   } }
   { select ?index_np ?decl_np where {
-    service <https://query.knowledgepixels.com/repo/type/GMUALeK6SJ-BpFkS9uaEEhVmz3fJNxxVS8O25qWOHQk> { # npx:NanopubIndex
+    service <https://query.np.trustyuri.net/repo/type/18c5002de2ba489f81a45912f6e684121566cf77c9371c554bc3b6e6a58e1d09> { # npx:NanopubIndex
       graph npa:graph {
         ?index_np np:hasAssertion ?assertion .
         ?index_np npx:hasNanopubType npx:NanopubIndex .
@@ -35,7 +35,7 @@ select distinct ?decl_np ?declares_pred ?fsr ?fsr_label where {
     }
   } }
   { select ?decl_np ?question ?declares_pred ?fsr where {
-    service <https://query.knowledgepixels.com/repo/type/ZHGzGTycy1X2wlPcU1D-fVKLZkhVh4voPs5zchzvp_I> { # fip:SIP-Declaration
+    service <https://query.np.trustyuri.net/repo/type/6471b3193c9ccb55f6c253dc5350fe7d528b664855878be83ece73721cefa7f2> { # fip:SIP-Declaration
       graph npa:graph {
         ?decl_np np:hasAssertion ?assertion .
         ?decl_np npx:hasNanopubType fip:SIP-Declaration .
@@ -47,7 +47,7 @@ select distinct ?decl_np ?declares_pred ?fsr ?fsr_label where {
     }
   } }
   optional { select distinct ?fsr (sample(?fsr_label_x) as ?fsr_label_pre) where {
-    service <https://query.knowledgepixels.com/repo/type/Bw-poPh6GJvC651MGhT2jxFTjMIim59P1qwCaj0s5XA> { # fip:FAIR-Supporting-Resource
+    service <https://query.np.trustyuri.net/repo/type/070fa9a0f87a189bc2eb9d4c1a14f68f11538cc2229b9f4fd6ac026a3d2ce570> { # fip:FAIR-Supporting-Resource
       graph npa:graph {
         ?fsr_np npa:hasValidSignatureForPublicKey ?pubkey ;
           np:hasAssertion ?assertion .
