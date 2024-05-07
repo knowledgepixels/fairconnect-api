@@ -1,5 +1,5 @@
 #+ summary: Text search for FAIR Connect
-#+ endpoint: https://query.knowledgepixels.com/repo/text
+#+ endpoint: https://query.np.trustyuri.net/repo/text
 #+ method: GET
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -22,7 +22,7 @@ select distinct ?np ?description ?label ?date (group_concat(distinct ?type; sepa
     ?np npx:hasNanopubType ?type .
     filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
   }
-  optional { service <https://query.knowledgepixels.com/repo/full> {
+  optional { service <https://query.np.trustyuri.net/repo/full> {
     graph npa:graph {
       ?np np:hasAssertion ?a .
       ?np np:hasPublicationInfo ?i .
