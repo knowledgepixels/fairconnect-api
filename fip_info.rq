@@ -1,6 +1,6 @@
 #+ summary: Get info about a particular FAIR Implementation Profile
 #+ method: GET
-#+ endpoint: https://query.knowledgepixels.com/repo/empty
+#+ endpoint: https://query.np.trustyuri.net/repo/empty
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix np: <http://www.nanopub.org/nschema#>
@@ -13,7 +13,7 @@ prefix fip: <https://w3id.org/fair/fip/terms/>
 select distinct ?decl_np ?question ?declares_pred ?fer ?fer_label where {
   optional { <x:> <x:> ?_fipnp_iri }
   { select ?index_np where {
-    service <https://query.knowledgepixels.com/repo/type/ku_XoOpL5OAewIF8zsh_l1IDswrdzDFmogRJj_7XO2Y> {  # fip:FAIR-Implementation-Profile
+    service <https://query.np.trustyuri.net/repo/type/92efd7a0ea4be4e01ec0817ccec87f975203b30addcc3166a204498ffed73b66> {  # fip:FAIR-Implementation-Profile
       graph npa:graph {
         ?_fipnp_iri npx:hasNanopubType fip:FAIR-Implementation-Profile ;
           np:hasAssertion ?assertion .
@@ -25,7 +25,7 @@ select distinct ?decl_np ?question ?declares_pred ?fer ?fer_label where {
     }
   } }
   { select ?index_np ?decl_np where {
-    service <https://query.knowledgepixels.com/repo/type/GMUALeK6SJ-BpFkS9uaEEhVmz3fJNxxVS8O25qWOHQk> { # npx:NanopubIndex
+    service <https://query.np.trustyuri.net/repo/type/18c5002de2ba489f81a45912f6e684121566cf77c9371c554bc3b6e6a58e1d09> { # npx:NanopubIndex
       graph npa:graph {
         ?index_np np:hasAssertion ?assertion .
         ?index_np npx:hasNanopubType npx:NanopubIndex .
@@ -36,7 +36,7 @@ select distinct ?decl_np ?question ?declares_pred ?fer ?fer_label where {
     }
   } }
   { select ?decl_np ?question ?declares_pred ?fer where {
-    service <https://query.knowledgepixels.com/repo/type/SthF6GCm2zppFgrbeuyJTmIigP-YgeQaYAdWrRq8-iM> { # fip:FIP-Declaration
+    service <https://query.np.trustyuri.net/repo/type/4ad845e860a6db3a69160adb7aec894e622280ff9881e41a600756ad1abcfa23> { # fip:FIP-Declaration
       graph npa:graph {
         ?decl_np np:hasAssertion ?assertion .
         ?decl_np npx:hasNanopubType fip:FIP-Declaration .
@@ -49,7 +49,7 @@ select distinct ?decl_np ?question ?declares_pred ?fer ?fer_label where {
     }
   } }
   optional { select distinct ?fer (sample(?fer_label_x) as ?fer_label_pre) where {
-    service <https://query.knowledgepixels.com/repo/type/PvWxFVHrxE409LymFLOHIERHZWzhlTFFMnacp7IBQ_4> { # fip:FAIR-Enabling-Resource
+    service <https://query.np.trustyuri.net/repo/type/3ef5b11551ebc44e34f4bca614b387204447656ce195314532769ca7b20143fe> { # fip:FAIR-Enabling-Resource
       graph npa:graph {
         ?fer_np npa:hasValidSignatureForPublicKey ?pubkey ;
           np:hasAssertion ?assertion .
