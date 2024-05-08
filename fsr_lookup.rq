@@ -17,7 +17,7 @@ select distinct ?v ?label ?description ?np ?date ?pubkey where {
     optional { ?np dct:description ?description }
     ?np npa:hasValidSignatureForPublicKey ?pubkey .
     ?np dct:created ?date .
-    { ?np npx:introduces ?thing } union { ?np npx:describes ?thing }
+    { ?np npx:introduces ?v } union { ?np npx:describes ?v }
     filter(str(?date) > "2022")
     filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
     ?np npx:hasNanopubType ?type .
