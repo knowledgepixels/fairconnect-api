@@ -1,0 +1,32 @@
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix np: <http://www.nanopub.org/nschema#>
+prefix npa: <http://purl.org/nanopub/admin/>
+prefix npx: <http://purl.org/nanopub/x/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix dct: <http://purl.org/dc/terms/>
+prefix fip: <https://w3id.org/fair/fip/terms/>
+prefix search: <http://www.openrdf.org/contrib/lucenesail#>
+
+select distinct ?thing ?label ?description ?date ?pubkey where {
+  graph npa:graph {
+    ?np rdfs:label ?label .
+    optional { ?np dct:description ?description }
+    ?np npa:hasValidSignatureForPublicKey ?pubkey .
+    ?np dct:created ?date .
+    { ?np npx:introduces ?thing } union { ?np npx:describes ?thing }
+    filter(str(?date) > "2022")
+    filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
+    ?np npx:hasNanopubType ?type .
+    values ?type { fip:Crosswalk fip:Editor fip:FAIR-Representation-Service fip:FAIR-Specification fip:Provenance-Tracking-Service fip:Validation-Service fip:Web-API } 
+    filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
+  }
+  {
+    ?np search:matches [
+      search:query ?_searchterm ;
+      search:property rdfs:label ] .
+  } union {
+    ?np search:matches [
+      search:query ?_searchterm ;
+      search:property dct:description ] .
+  }
+} limit 10
