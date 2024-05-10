@@ -1,0 +1,58 @@
+#+ summary: Get FAIR Implementation Communities
+#+ endpoint: https://query.knowledgepixels.com/repo/type/6a09747868afc83837e38d1bac79362fbcc3e2032cff2f2d244f4e24cbd085c6
+#+ method: GET
+
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix np: <http://www.nanopub.org/nschema#>
+prefix npa: <http://purl.org/nanopub/admin/>
+prefix npx: <http://purl.org/nanopub/x/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix dct: <http://purl.org/dc/terms/>
+prefix fip: <https://w3id.org/fair/fip/terms/>
+
+select distinct ?community ?label ?comment (group_concat(distinct ?domain; separator=" ") as ?domains) (group_concat(distinct ?superdomain; separator=" ") as ?superdomains) where {
+  graph npa:graph {
+    ?np npa:hasValidSignatureForPublicKey ?pubkey ;
+      npx:hasNanopubType fip:FAIR-Implementation-Community ;
+      np:hasAssertion ?a .
+    ?np dct:created ?date . filter(str(?date) > "2022")
+    filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
+    filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
+  }
+  graph ?a {
+    ?community a fip:FAIR-Implementation-Community ;
+      rdfs:label ?label ;
+      rdfs:comment ?comment ;
+      fip:has-research-domain ?domain .
+    ?community fip:has-research-domain ?__domain_iri .
+    ?community fip:has-research-domain ?domainx .
+  }
+  graph <http://purl.org/np/RArRAOwj4QOppEPCR8WVvOBmrX7oRKOrPi-asX-7AY66I#assertion> {
+    values ?superdomain {
+      <http://purl.obolibrary.org/obo/NCIT_C16548> 
+      <http://purl.obolibrary.org/obo/OMIT_0007951>
+      <http://purl.obolibrary.org/obo/NCIT_C39794>
+      <http://purl.obolibrary.org/obo/NCIT_C17141>
+      <http://www.fairsharing.org/ontology/subject/SRAO_0000041>
+      <http://edamontology.org/topic_3318>
+      <http://aims.fao.org/aos/agrovoc/c_694>
+      <http://aims.fao.org/aos/agrovoc/c_331559>
+      <http://purl.obolibrary.org/obo/NCIT_C16633>
+      <http://purl.obolibrary.org/obo/OMIT_0007039>
+      <http://aims.fao.org/aos/agrovoc/c_3235>
+      <http://purl.obolibrary.org/obo/OMIT_0010809>
+      <http://aims.fao.org/aos/agrovoc/c_7188>
+      <http://aims.fao.org/aos/agrovoc/c_203>
+      <http://purl.obolibrary.org/obo/NCIT_C16345>
+      <http://purl.obolibrary.org/obo/NCIT_C19199>
+      <http://www.fairsharing.org/ontology/subject/SRAO_0000401>
+    }
+    ?domain rdfs:subClassOf* ?superdomain .
+
+    bind(coalesce(?__superdomain_iri, ?superdomain) as ?sd)
+    ?domainx rdfs:subClassOf* ?sd .
+  }
+  optional {<x:> <x:> ?__superdomain_iri} # (for grlc to pick it up)
+}
+group by ?community ?label ?comment
+order by desc(?count)
