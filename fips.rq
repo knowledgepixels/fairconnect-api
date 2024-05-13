@@ -1,0 +1,22 @@
+#+ summary: Get all FAIR Implementation Profiles
+#+ method: GET
+#+ endpoint: https://query.np.trustyuri.net/repo/type/92efd7a0ea4be4e01ec0817ccec87f975203b30addcc3166a204498ffed73b66
+
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix np: <http://www.nanopub.org/nschema#>
+prefix npa: <http://purl.org/nanopub/admin/>
+prefix npx: <http://purl.org/nanopub/x/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix dct: <http://purl.org/dc/terms/>
+prefix fip: <https://w3id.org/fair/fip/terms/>
+
+select distinct ?fipnp ?label ?date where {
+  graph npa:graph {
+    ?fipnp npx:hasNanopubType fip:FAIR-Implementation-Profile .
+    ?fipnp npa:hasValidSignatureForPublicKey ?pubkey .
+    ?fipnp rdfs:label ?label .
+    ?fipnp dct:created ?date .
+    filter not exists { ?fipnp npx:hasNanopubType npx:ExampleNanopub . }
+    filter not exists { ?fipnpx npx:invalidates ?fipnp ; npa:hasValidSignatureForPublicKey ?pubkey . }
+  }
+}
