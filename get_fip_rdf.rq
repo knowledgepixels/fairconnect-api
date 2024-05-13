@@ -1,0 +1,57 @@
+#+ summary: Get RDF representation of a given FAIR Implementation Profile
+#+ method: GET
+#+ endpoint: https://query.knowledgepixels.com/repo/full
+
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix np: <http://www.nanopub.org/nschema#>
+prefix npa: <http://purl.org/nanopub/admin/>
+prefix npx: <http://purl.org/nanopub/x/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix dct: <http://purl.org/dc/terms/>
+prefix fip: <https://w3id.org/fair/fip/terms/>
+
+construct {
+  ?subj1 ?pred1 ?obj1 .
+  ?subj2 ?pred2 ?obj2 .
+  ?subj3 ?pred3 ?obj3 .
+  ?fer rdfs:label ?fer_label_x .
+} where {
+  optional { <x:> <x:> ?_fipnp_iri }
+  graph npa:graph {
+    ?_fipnp_iri npx:hasNanopubType fip:FAIR-Implementation-Profile ;
+      np:hasAssertion ?assertion1 .
+  }
+  graph ?assertion1 {
+    ?fip a fip:FAIR-Implementation-Profile ;
+      fip:has-declaration-index ?index_np .
+    ?subj1 ?pred1 ?obj1 .
+  }
+  graph npa:graph {
+    ?index_np np:hasAssertion ?assertion2 .
+    ?index_np npx:hasNanopubType npx:NanopubIndex .
+  }
+  graph ?assertion2 {
+    ?index_np npx:includesElement ?decl_np .
+    ?subj2 ?pred2 ?obj2 .
+  }
+  graph npa:graph {
+    ?decl_np np:hasAssertion ?assertion3 .
+    ?decl_np npx:hasNanopubType fip:FIP-Declaration .
+  }
+  graph ?assertion3 {
+    ?subj fip:refers-to-question ?question .
+    values ?declares_pred { fip:declares-current-use-of fip:declares-planned-use-of fip:declares-planned-development-of fip:declares-planned-replacement-of }
+    ?subj ?declares_pred ?fer .
+    ?subj3 ?pred3 ?obj3 .
+  }
+  optional {
+    graph npa:graph {
+      ?fer_np npa:hasValidSignatureForPublicKey ?pubkey ;
+        np:hasAssertion ?assertion3 .
+      filter not exists { ?fer_npx npx:invalidates ?fer_np ; npa:hasValidSignatureForPublicKey ?pubkey . }
+    }
+    graph ?assertion3 {
+      ?fer rdfs:label ?fer_label_x .
+    }
+  }
+}
