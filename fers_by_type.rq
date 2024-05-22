@@ -11,7 +11,7 @@ prefix dct: <http://purl.org/dc/terms/>
 prefix fip: <https://w3id.org/fair/fip/terms/>
 prefix search: <http://www.openrdf.org/contrib/lucenesail#>
 
-select distinct ?np ?description ?label ?date ?types ?qualifier (group_concat(distinct ?community; separator=" ") as ?communities) ?maxscore where {
+select distinct ?np ?thing ?description ?label ?date ?types ?qualifier (group_concat(distinct ?community; separator=" ") as ?communities) ?maxscore where {
 
   optional { <x:> <x:> ?__endpoint_iri } .
   bind(coalesce(?__endpoint_iri, <https://query.np.trustyuri.net/repo/empty>) as ?endpoint)
@@ -32,7 +32,7 @@ select distinct ?np ?description ?label ?date ?types ?qualifier (group_concat(di
         filter(str(?date) > "2022")
         filter exists { ?np npx:hasNanopubType ?fsr_type . values ?fsr_type { fip:FAIR-Enabling-Resource fip:FAIR-Supporting-Resource } }
         filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
-        ?np npx:hasNanopubType ?__type_iri .
+        ?np npx:hasNanopubType ?_type_iri .
         ?np npx:hasNanopubType ?type .
         filter(?type != fip:FAIR-Enabling-Resource)
         filter(?type != fip:Available-FAIR-Enabling-Resource)
@@ -105,4 +105,4 @@ select distinct ?np ?description ?label ?date ?types ?qualifier (group_concat(di
     }
   } }
 
-} group by ?np ?description ?label ?date ?types ?qualifier ?maxscore order by desc(?maxscore)
+} group by ?np ?thing ?description ?label ?date ?types ?qualifier ?maxscore order by desc(?maxscore)
