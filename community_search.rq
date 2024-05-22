@@ -11,7 +11,7 @@ prefix dct: <http://purl.org/dc/terms/>
 prefix fip: <https://w3id.org/fair/fip/terms/>
 prefix search: <http://www.openrdf.org/contrib/lucenesail#>
 
-select distinct ?np ?label ?comment ?date (group_concat(distinct ?domain; separator=" ") as ?domains) ?qualifier (max(?score) as ?maxscore) where {
+select distinct ?np ?label ?comment ?date (group_concat(distinct ?domain; separator=" ") as ?domains) ?qualifier (max(?score) as ?maxscore) (count(distinct ?fip) as ?fipcount) where {
   graph npa:graph {
     ?np rdfs:label ?label ;
       npa:hasValidSignatureForPublicKey ?pubkey ;
@@ -47,6 +47,17 @@ select distinct ?np ?label ?comment ?date (group_concat(distinct ?domain; separa
     }
     graph ?qa {
       ?qualifier npx:qualifies ?np .
+    }
+  } }
+  optional { service <https://query.np.trustyuri.net/repo/type/92efd7a0ea4be4e01ec0817ccec87f975203b30addcc3166a204498ffed73b66> {  # (https://w3id.org/fair/fip/terms/FAIR-Implementation-Profile)
+    graph npa:graph {
+      ?fipnp np:hasAssertion ?fa .
+      ?fipnp npa:hasValidSignatureForPublicKey ?fpubkey .
+      ?fipnp npx:hasNanopubType fip:FAIR-Implementation-Profile .
+      filter not exists { ?fipnpx npx:invalidates ?fipnp ; npa:hasValidSignatureForPublicKey ?fpubkey . }
+    }
+    graph ?fa {
+      ?fip fip:declared-by ?community .
     }
   } }
   filter not exists { service <https://query.np.trustyuri.net/repo/type/39692876d0a7881c82e9a2cb6dc8859fb16fa69fb41cea2ace2f8fa70bc52aed> {  # (http://purl.org/nanopub/x/disapprovesOf)
