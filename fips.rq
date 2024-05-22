@@ -1,6 +1,6 @@
 #+ summary: Get all FAIR Implementation Profiles
 #+ method: GET
-#+ endpoint: https://query.np.trustyuri.net/repo/type/92efd7a0ea4be4e01ec0817ccec87f975203b30addcc3166a204498ffed73b66
+#+ endpoint: https://query.np.trustyuri.net/repo/full
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix np: <http://www.nanopub.org/nschema#>
