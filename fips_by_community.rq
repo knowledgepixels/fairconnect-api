@@ -1,0 +1,44 @@
+#+ summary: Get all FIPs for a given community
+#+ endpoint: https://query.np.trustyuri.net/repo/empty
+#+ method: GET
+
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix np: <http://www.nanopub.org/nschema#>
+prefix npa: <http://purl.org/nanopub/admin/>
+prefix npx: <http://purl.org/nanopub/x/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix dct: <http://purl.org/dc/terms/>
+prefix fip: <https://w3id.org/fair/fip/terms/>
+prefix search: <http://www.openrdf.org/contrib/lucenesail#>
+
+select distinct ?fipnp ?fip ?fiplabel where {
+  service <https://query.np.trustyuri.net/repo/type/6a09747868afc83837e38d1bac79362fbcc3e2032cff2f2d244f4e24cbd085c6> {  # (https://w3id.org/fair/fip/terms/FAIR-Implementation-Community)
+    graph npa:graph {
+      ?np rdfs:label ?label ;
+        npa:hasValidSignatureForPublicKey ?pubkey ;
+        dct:created ?date ;
+        npx:hasNanopubType fip:FAIR-Implementation-Community ;
+        np:hasAssertion ?a .
+      ?np dct:created ?date . filter(str(?date) > "2022")
+      filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
+      filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
+    }
+    graph ?a {
+      ?_community_iri a fip:FAIR-Implementation-Community ;
+        rdfs:label ?label ;
+        rdfs:comment ?comment .
+    }
+  }
+  service <https://query.np.trustyuri.net/repo/type/92efd7a0ea4be4e01ec0817ccec87f975203b30addcc3166a204498ffed73b66> {  # (https://w3id.org/fair/fip/terms/FAIR-Implementation-Profile)
+    graph npa:graph {
+      ?fipnp np:hasAssertion ?fa .
+      ?fipnp rdfs:label ?fiplabel .
+      ?fipnp npa:hasValidSignatureForPublicKey ?fpubkey .
+      ?fipnp npx:hasNanopubType fip:FAIR-Implementation-Profile .
+      filter not exists { ?fipnpx npx:invalidates ?fipnp ; npa:hasValidSignatureForPublicKey ?fpubkey . }
+    }
+    graph ?fa {
+      ?fip fip:declared-by ?_community_iri .
+    }
+  }
+}
