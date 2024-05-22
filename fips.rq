@@ -10,13 +10,18 @@ prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 prefix dct: <http://purl.org/dc/terms/>
 prefix fip: <https://w3id.org/fair/fip/terms/>
 
-select distinct ?fipnp ?label ?date where {
+select distinct ?fipnp ?fip ?label ?community ?date where {
   graph npa:graph {
     ?fipnp npx:hasNanopubType fip:FAIR-Implementation-Profile .
     ?fipnp npa:hasValidSignatureForPublicKey ?pubkey .
     ?fipnp rdfs:label ?label .
     ?fipnp dct:created ?date .
+    ?fipnp np:hasAssertion ?a .
+    graph ?a {
+      ?fip fip:declared-by ?community .
+    }
     filter not exists { ?fipnp npx:hasNanopubType npx:ExampleNanopub . }
     filter not exists { ?fipnpx npx:invalidates ?fipnp ; npa:hasValidSignatureForPublicKey ?pubkey . }
   }
+  ?community fip:has-research-domain ?__domain_iri .
 }
