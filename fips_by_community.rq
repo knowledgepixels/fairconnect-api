@@ -32,7 +32,7 @@ select distinct ?fipnp ?fip ?fiplabel where {
   service <https://query.np.trustyuri.net/repo/type/92efd7a0ea4be4e01ec0817ccec87f975203b30addcc3166a204498ffed73b66> {  # (https://w3id.org/fair/fip/terms/FAIR-Implementation-Profile)
     graph npa:graph {
       ?fipnp np:hasAssertion ?fa .
-      ?fipnp rdfs:label ?fiplabel .
+      optional { ?fipnp rdfs:label ?fiplabel . }
       ?fipnp npa:hasValidSignatureForPublicKey ?fpubkey .
       ?fipnp npx:hasNanopubType fip:FAIR-Implementation-Profile .
       filter not exists { ?fipnpx npx:invalidates ?fipnp ; npa:hasValidSignatureForPublicKey ?fpubkey . }
