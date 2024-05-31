@@ -14,11 +14,11 @@ prefix search: <http://www.openrdf.org/contrib/lucenesail#>
 select distinct ?fipnp ?fip ?fiplabel where {
   service <https://query.np.trustyuri.net/repo/type/6a09747868afc83837e38d1bac79362fbcc3e2032cff2f2d244f4e24cbd085c6> {  # (https://w3id.org/fair/fip/terms/FAIR-Implementation-Community)
     graph npa:graph {
-      ?np rdfs:label ?label ;
-        npa:hasValidSignatureForPublicKey ?pubkey ;
+      ?np npa:hasValidSignatureForPublicKey ?pubkey ;
         dct:created ?date ;
         npx:hasNanopubType fip:FAIR-Implementation-Community ;
         np:hasAssertion ?a .
+      optional { ?np rdfs:label ?label . }
       ?np dct:created ?date . filter(str(?date) > "2022")
       filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
       filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
