@@ -10,7 +10,7 @@ prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 prefix dct: <http://purl.org/dc/terms/>
 prefix fip: <https://w3id.org/fair/fip/terms/>
 
-select distinct ?decl_np ?question ?declares_pred ?fer ?fer_label where {
+select distinct ?decl_np ?question ?declares_pred ?fer ?fer_label ?fer_description where {
   optional { <x:> <x:> ?_fipnp_iri }
   { select ?index_np where {
     service <https://query.np.trustyuri.net/repo/type/92efd7a0ea4be4e01ec0817ccec87f975203b30addcc3166a204498ffed73b66> {  # fip:FAIR-Implementation-Profile
@@ -48,18 +48,18 @@ select distinct ?decl_np ?question ?declares_pred ?fer ?fer_label where {
       }
     }
   } }
-  optional { select distinct ?fer (sample(?fer_label_x) as ?fer_label_pre) where {
+  optional { select distinct ?fer ?fer_label_pre ?fer_description where {
     service <https://query.np.trustyuri.net/repo/type/3ef5b11551ebc44e34f4bca614b387204447656ce195314532769ca7b20143fe> { # fip:FAIR-Enabling-Resource
       graph npa:graph {
         ?fer_np npa:hasValidSignatureForPublicKey ?pubkey ;
           np:hasAssertion ?assertion .
-        filter not exists { ?fer_npx npx:invalidates ?fer_np ; npa:hasValidSignatureForPublicKey ?pubkey . }
       }
       graph ?assertion {
-        ?fer rdfs:label ?fer_label_x .
+        ?fer rdfs:label ?fer_label_pre .
+        ?fer rdfs:comment ?fer_description .
       }
     }
-  } group by ?fer }
+  } group by ?fer ?fer_label_pre ?fer_description }
   bind(coalesce(?fer_label_pre, replace(str(?fer), "^.*[/#]([^/#]*)$", "$1")) as ?fer_label)
   bind(concat(replace(replace(str(?question), "^.*-([^-MD]+(-[MD]+)?)$", "$1"), "F|M", "0"), "x") as ?sort)
 } order by ?sort
