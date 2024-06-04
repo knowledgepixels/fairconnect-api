@@ -53,6 +53,7 @@ select distinct ?decl_np ?question ?declares_pred ?fer ?fer_label ?fer_descripti
       graph npa:graph {
         ?fer_np npa:hasValidSignatureForPublicKey ?pubkey ;
           np:hasAssertion ?assertion .
+        filter not exists { ?fer_npx npx:invalidates ?fer_np ; npa:hasValidSignatureForPublicKey ?pubkey . }
       }
       graph ?assertion {
         ?fer rdfs:label ?fer_label_pre .
