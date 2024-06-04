@@ -48,7 +48,7 @@ select distinct ?decl_np ?question ?declares_pred ?fer ?fer_label ?fer_descripti
       }
     }
   } }
-  optional { select distinct ?fer ?fer_label_pre ?fer_description where {
+  optional { select distinct ?fer ?fer_label_pre ?fer_description_pre where {
     service <https://query.np.trustyuri.net/repo/type/3ef5b11551ebc44e34f4bca614b387204447656ce195314532769ca7b20143fe> { # fip:FAIR-Enabling-Resource
       graph npa:graph {
         ?fer_np npa:hasValidSignatureForPublicKey ?pubkey ;
@@ -57,10 +57,23 @@ select distinct ?decl_np ?question ?declares_pred ?fer ?fer_label ?fer_descripti
       }
       graph ?assertion {
         ?fer rdfs:label ?fer_label_pre .
-        ?fer rdfs:comment ?fer_description .
+        ?fer rdfs:comment ?fer_description_pre .
       }
     }
-  } group by ?fer ?fer_label_pre ?fer_description }
-  bind(coalesce(?fer_label_pre, replace(str(?fer), "^.*[/#]([^/#]*)$", "$1")) as ?fer_label)
+  } group by ?fer ?fer_label_pre ?fer_description_pre }
+  optional { select distinct ?fer ?fer_label_prex ?fer_description_prex where {
+    service <https://query.np.trustyuri.net/repo/type/3ef5b11551ebc44e34f4bca614b387204447656ce195314532769ca7b20143fe> { # fip:FAIR-Enabling-Resource
+      graph npa:graph {
+        ?fer_np npa:hasValidSignatureForPublicKey ?pubkey ;
+          np:hasAssertion ?assertion .
+      }
+      graph ?assertion {
+        ?fer rdfs:label ?fer_label_prex .
+        ?fer rdfs:comment ?fer_description_prex .
+      }
+    }
+  } group by ?fer ?fer_label_prex ?fer_description_prex }
+  bind(coalesce(?fer_description_pre, ?fer_description_prex) as ?fer_description)
+  bind(coalesce(?fer_label_pre, ?fer_label_prex, replace(str(?fer), "^.*[/#]([^/#]*)$", "$1")) as ?fer_label)
   bind(concat(replace(replace(str(?question), "^.*-([^-MD]+(-[MD]+)?)$", "$1"), "F|M", "0"), "x") as ?sort)
 } order by ?sort
