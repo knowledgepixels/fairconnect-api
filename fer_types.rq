@@ -33,7 +33,7 @@ select ?type (count(distinct ?np) as ?count) where {
         filter(?type != fip:FAIR-Supporting-Resource)
         filter(?type != fip:Available-FAIR-Supporting-Resource)
         filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
-        filter(regex(str(?type), '^http'))
+        filter(strstarts(str(?type), str(fip:)))
       }
     }
 
@@ -54,7 +54,7 @@ select ?type (count(distinct ?np) as ?count) where {
         filter(?type != fip:FAIR-Supporting-Resource)
         filter(?type != fip:Available-FAIR-Supporting-Resource)
         filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
-        filter(regex(str(?type), '^http'))
+        filter(strstarts(str(?type), str(fip:)))
       }
     }
 
