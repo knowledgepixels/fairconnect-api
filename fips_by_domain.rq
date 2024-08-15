@@ -26,7 +26,10 @@ select distinct ?fipnp ?fip ?fiplabel ?community ?communitylabel (group_concat(d
     ?community a fip:FAIR-Implementation-Community ;
       rdfs:label ?communitylabel ;
       fip:has-research-domain ?domain .
-    ?community fip:has-research-domain ?_domain_iri .
+    ?community fip:has-research-domain ?domainx .
+  }
+  graph <http://purl.org/np/RArRAOwj4QOppEPCR8WVvOBmrX7oRKOrPi-asX-7AY66I#assertion> {
+    ?domainx rdfs:subClassOf* ?_domain_iri .
   }
   service <https://query.np.trustyuri.net/repo/type/92efd7a0ea4be4e01ec0817ccec87f975203b30addcc3166a204498ffed73b66> {  # (https://w3id.org/fair/fip/terms/FAIR-Implementation-Profile)
     select ?fipnp ?fip ?fiplabel ?community {
