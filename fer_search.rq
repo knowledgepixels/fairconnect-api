@@ -111,4 +111,4 @@ select distinct ?np ?thing ?description ?label ?date ?types ?qualifier (group_co
     }
   } }
 
-} group by ?np ?description ?label ?date ?types ?qualifier ?maxscore order by desc(?maxscore)
+} group by ?np ?thing ?description ?label ?date ?types ?qualifier ?maxscore order by desc(?maxscore)
