@@ -17,6 +17,7 @@ select distinct ?np ?community ?label ?comment ?date (group_concat(distinct ?dom
       npa:hasValidSignatureForPublicKey ?pubkey ;
       dct:created ?date ;
       npx:hasNanopubType fip:FAIR-Implementation-Community ;
+      npx:introduces ?community ;
       np:hasAssertion ?a .
     ?np dct:created ?date . filter(str(?date) > "2022")
     filter(strends(str(?date), "Z"))
