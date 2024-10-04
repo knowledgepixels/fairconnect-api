@@ -11,7 +11,7 @@ prefix dct: <http://purl.org/dc/terms/>
 prefix foaf: <http://xmlns.com/foaf/0.1/>
 
 select distinct ?facilitatorName ?facilitatorId ?pubkey where {
-  graph <https://w3id.org/np/RAjjZJ-PClvOBvT-MiZuLM0v2KPun5_aGKud0KxRXuI74#assertion> {
+  graph <https://w3id.org/np/RA5PyVZnfPpd5ozkVjzQQbWyfLXCmeApLfhsyl8Rgnmh8#assertion> {
     ?pubkeys npx:hasPublicKey ?pubkey .
   }
   service <https://query.np.trustyuri.net/repo/type/77757cabf6184c51c20b8b0fe5dc5e1365b7f628448335184ad54319a0affdfc> {  # (http://purl.org/nanopub/x/declaredBy)
