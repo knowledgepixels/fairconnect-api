@@ -1,5 +1,5 @@
 #+ summary: Get FAIR-Enabling Resources by type
-#+ endpoint: https://query.np.trustyuri.net/repo/empty
+#+ endpoint: https://query.np.trustyuri.net/repo/full
 #+ method: GET
 
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -23,7 +23,7 @@ select distinct ?np ?thing ?description ?label ?date ?types ?qualifier (group_co
     bind(replace(str(?endpoint), "repo/[a-zA-Z0-9]+$", "") as ?service)
       
     bind(iri(concat(?service, "repo/meta")) as ?meta_service)
-    service ?meta_service {
+    #service ?meta_service {
       graph npa:graph {
         ?np rdfs:label ?label ;
             npa:hasValidSignatureForPublicKey ?pubkey ;
@@ -42,10 +42,10 @@ select distinct ?np ?thing ?description ?label ?date ?types ?qualifier (group_co
         filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
         filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
       }
-    }
+    #}
 
     bind(iri(concat(?service, "repo/type/", sha256("http://purl.org/nanopub/x/disapprovesOf"))) as ?disappr_service)
-    filter not exists { service ?disappr_service {
+    filter not exists { #service ?disappr_service {
       graph npa:graph {
         ?disapproval_np np:hasAssertion ?da ;
           npa:hasValidSignatureForPublicKey ?dpubkey .
@@ -57,22 +57,22 @@ select distinct ?np ?thing ?description ?label ?date ?types ?qualifier (group_co
       graph ?da {
         ?disapprover npx:disapprovesOf ?np .
       }
-    } }
+    } #}
 
   } group by ?np ?label ?date order by desc(?maxscore) }
     
   bind(iri(concat(?service, "repo/full")) as ?full_service)
-  optional { service ?full_service {
+  optional { #service ?full_service {
     graph npa:graph {
       ?np np:hasAssertion ?a .
     }
     graph ?a {
       ?thing rdfs:comment ?description .
     }
-  } }
+  } #}
 
   bind(iri(concat(?service, "repo/type/", sha256("http://purl.org/nanopub/x/qualifies"))) as ?qualifies_service)
-  optional { service ?qualifies_service {
+  optional { #service ?qualifies_service {
     graph npa:graph {
       ?qualification_np np:hasAssertion ?qa ;
         npa:hasValidSignatureForPublicKey ?qpubkey .
@@ -84,11 +84,11 @@ select distinct ?np ?thing ?description ?label ?date ?types ?qualifier (group_co
     graph ?qa {
       ?qualifier npx:qualifies ?np .
     }
-  } }
+  } #}
 
 
   bind(iri(concat(?service, "repo/type/", sha256("https://w3id.org/fair/fip/terms/FIP-Declaration"))) as ?fip_service)
-  optional { service ?fip_service {
+  optional { #service ?fip_service {
     graph npa:graph {
       ?decl_np np:hasAssertion ?decl_a ;
         npa:hasValidSignatureForPublicKey ?decl_pubkey .
@@ -103,6 +103,6 @@ select distinct ?np ?thing ?description ?label ?date ?types ?qualifier (group_co
       # ----
       ?decl fip:declared-by ?community .
     }
-  } }
+  } #}
 
 } group by ?np ?thing ?description ?label ?date ?types ?qualifier ?maxscore order by desc(?maxscore)
