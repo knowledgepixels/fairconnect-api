@@ -21,7 +21,7 @@ select distinct ?thing ?label ?description ?np ?date ?pubkey where {
     filter(str(?date) > "2022")
     filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
     ?np npx:hasNanopubType ?type .
-    values ?type { fip:Crosswalk fip:Editor fip:FAIR-Representation-Service fip:FAIR-Specification fip:Provenance-Tracking-Service fip:Validation-Service fip:Web-API fip:Identifier-service fip:Authentication-and-authorization-service fip:Registry } 
+    values ?type { fip:FAIR-Enabling-Resource fip:FAIR-Supporting-Resource fip:Crosswalk fip:Editor fip:FAIR-Representation-Service fip:FAIR-Specification fip:Provenance-Tracking-Service fip:Validation-Service fip:Web-API fip:Identifier-service fip:Authentication-and-authorization-service fip:Registry } 
     filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
   }
   {
