@@ -1,4 +1,4 @@
-#+ summary: Full-text search for FAIR Implementation Profiles
+#+ summary: Full-text search for FAIR Enabling Resources
 #+ endpoint: https://query.np.trustyuri.net/repo/text
 #+ method: GET
 
