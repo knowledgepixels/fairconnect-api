@@ -12,11 +12,25 @@ prefix fip: <https://w3id.org/fair/fip/terms/>
 prefix search: <http://www.openrdf.org/contrib/lucenesail#>
 
 select distinct ?np ?community ?label ?comment ?date (group_concat(distinct ?domain; separator=" ") as ?domains) ?qualifier (max(?score) as ?maxscore) (count(distinct ?fip) as ?fipcount) where {
+  { select ?latest_curators_assertion where {
+  graph npa:graph {
+    <https://w3id.org/np/RA27Uhopq4MHZziL2lKXX-wTb1jz4KVLbHaupxyAcCt9Y> npa:hasValidSignatureForPublicKey ?curators_np_pk .
+    ?latest_curators_np npa:hasValidSignatureForPublicKey ?curators_np_pk .
+    filter not exists { ?latest_curators_npx npx:invalidates ?latest_curators_np ; npa:hasValidSignatureForPublicKey ?curators_np_pk . }
+    ?latest_curators_np np:hasAssertion ?latest_curators_assertion .
+  }
+  graph npa:networkGraph {
+    ?latest_curators_np (npx:supersedes)* <https://w3id.org/np/RA27Uhopq4MHZziL2lKXX-wTb1jz4KVLbHaupxyAcCt9Y> .
+    filter not exists { ?latest_curators_npxx npx:supersedes ?latest_curators_np }
+  }
+  } }
+
   graph npa:graph {
     ?np rdfs:label ?label ;
       npa:hasValidSignatureForPublicKey ?pubkey ;
       dct:created ?date ;
       npx:hasNanopubType fip:FAIR-Implementation-Community ;
+      npx:introduces ?community ;
       np:hasAssertion ?a .
     ?np dct:created ?date . filter(str(?date) > "2022")
     filter(strends(str(?date), "Z"))
@@ -25,7 +39,7 @@ select distinct ?np ?community ?label ?comment ?date (group_concat(distinct ?dom
   }
   ?np search:matches [
     search:query ?_query ;
-    search:property ?property ;
+    search:property npa:hasFilterLiteral ;
     search:score ?score ;
     search:snippet ?snippet ] .
   service <https://query.np.trustyuri.net/repo/type/6a09747868afc83837e38d1bac79362fbcc3e2032cff2f2d244f4e24cbd085c6> {  # (https://w3id.org/fair/fip/terms/FAIR-Implementation-Community)
@@ -33,14 +47,19 @@ select distinct ?np ?community ?label ?comment ?date (group_concat(distinct ?dom
      ?community a fip:FAIR-Implementation-Community ;
         rdfs:label ?label ;
         rdfs:comment ?comment .
-      ?community fip:has-research-domain ?domain .
       ?community fip:has-research-domain ?domainx .
     }
-    graph <http://purl.org/np/RArRAOwj4QOppEPCR8WVvOBmrX7oRKOrPi-asX-7AY66I#assertion> {
+    graph ?latest_curators_assertion {
       ?domainx rdfs:subClassOf* ?_domain_iri .
+    }
+    graph ?a {
+      ?community fip:has-research-domain ?domain .
     }
   }
   optional { service <https://query.np.trustyuri.net/repo/type/cd51a3ac3e109fd12aacd5a324e14ebff644ce209c916e4250a3f50c2ddf0051> {  # (http://purl.org/nanopub/x/qualifies)
+    graph ?qa {
+      ?qualifier npx:qualifies ?np .
+    }
     graph npa:graph {
       ?qualification_np np:hasAssertion ?qa ;
         npa:hasValidSignatureForPublicKey ?qpubkey .
@@ -49,32 +68,29 @@ select distinct ?np ?community ?label ?comment ?date (group_concat(distinct ?dom
     graph <https://w3id.org/np/RAO1cF5peSY1GO584EAUzBccCWNDdfsMPEzndjPp3rKhg/assertion> {
       ?qpubkeys npx:hasPublicKey ?qpubkey .
     }
-    graph ?qa {
-      ?qualifier npx:qualifies ?np .
-    }
   } }
   optional { service <https://query.np.trustyuri.net/repo/type/92efd7a0ea4be4e01ec0817ccec87f975203b30addcc3166a204498ffed73b66> {  # (https://w3id.org/fair/fip/terms/FAIR-Implementation-Profile)
+    graph ?fa {
+      ?fip fip:declared-by ?community .
+    }
     graph npa:graph {
       ?fipnp np:hasAssertion ?fa .
       ?fipnp npa:hasValidSignatureForPublicKey ?fpubkey .
       ?fipnp npx:hasNanopubType fip:FAIR-Implementation-Profile .
       filter not exists { ?fipnpx npx:invalidates ?fipnp ; npa:hasValidSignatureForPublicKey ?fpubkey . }
     }
-    graph ?fa {
-      ?fip fip:declared-by ?community .
-    }
   } }
   filter not exists { service <https://query.np.trustyuri.net/repo/type/39692876d0a7881c82e9a2cb6dc8859fb16fa69fb41cea2ace2f8fa70bc52aed> {  # (http://purl.org/nanopub/x/disapprovesOf)
+    graph ?da {
+      ?disapprover npx:disapprovesOf ?np .
+    }
     graph npa:graph {
       ?disapproval_np np:hasAssertion ?da ;
         npa:hasValidSignatureForPublicKey ?dpubkey .
       filter not exists { ?disapproval_npx npx:invalidates ?disapproval_np ; npa:hasValidSignatureForPublicKey ?dpubkey . }
     }
-    graph <https://w3id.org/np/RAO1cF5peSY1GO584EAUzBccCWNDdfsMPEzndjPp3rKhg/assertion> {
+    graph ?latest_curators_assertion {
       ?qpubkeys npx:hasPublicKey ?dpubkey .
-    }
-    graph ?da {
-      ?disapprover npx:disapprovesOf ?np .
     }
   } }
 }
