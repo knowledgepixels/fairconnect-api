@@ -13,19 +13,24 @@ prefix search: <http://www.openrdf.org/contrib/lucenesail#>
 
 select distinct ?np ?thing ?description ?label ?date ?types ?qualifier (group_concat(distinct ?community; separator=" ") as ?communities) ?maxscore where {
 
-  optional { <x:> <x:> ?__endpoint_iri } .
-  bind(coalesce(?__endpoint_iri, <https://query.np.trustyuri.net/repo/empty>) as ?endpoint)
-  bind(replace(str(?endpoint), "repo/[a-zA-Z0-9]+$", "") as ?service)
+  { select ?latest_curators_assertion where {
+    graph npa:graph {
+      <https://w3id.org/np/RA27Uhopq4MHZziL2lKXX-wTb1jz4KVLbHaupxyAcCt9Y> npa:hasValidSignatureForPublicKey ?curators_np_pk .
+      ?latest_curators_np npa:hasValidSignatureForPublicKey ?curators_np_pk .
+      filter not exists { ?latest_curators_npx npx:invalidates ?latest_curators_np ; npa:hasValidSignatureForPublicKey ?curators_np_pk . }
+      ?latest_curators_np np:hasAssertion ?latest_curators_assertion .
+    }
+    graph npa:networkGraph {
+      ?latest_curators_np (npx:supersedes)* <https://w3id.org/np/RA27Uhopq4MHZziL2lKXX-wTb1jz4KVLbHaupxyAcCt9Y> .
+      filter not exists { ?latest_curators_npxx npx:supersedes ?latest_curators_np }
+    }
+  } }
 
-  { select ?np ?label ?date (group_concat(distinct ?type; separator=" ") as ?types) (max(?score) as ?maxscore) where {
+  { select ?np ?thing ?label ?description ?date (group_concat(distinct ?type; separator=" ") as ?types) where {
 
-    bind(coalesce(?__endpoint_iri, <https://query.np.trustyuri.net/repo/empty>) as ?endpoint)
-    bind(replace(str(?endpoint), "repo/[a-zA-Z0-9]+$", "") as ?service)
-      
-    bind(iri(concat(?service, "repo/meta")) as ?meta_service)
-    #service ?meta_service {
       graph npa:graph {
         ?np rdfs:label ?label ;
+            dct:description ?description ;
             npa:hasValidSignatureForPublicKey ?pubkey ;
             dct:created ?date .
         ?np npx:introduces|npx:describes ?thing .
@@ -42,54 +47,41 @@ select distinct ?np ?thing ?description ?label ?date ?types ?qualifier (group_co
         filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
         filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
       }
-    #}
 
-    bind(iri(concat(?service, "repo/type/", sha256("http://purl.org/nanopub/x/disapprovesOf"))) as ?disappr_service)
-    filter not exists { #service ?disappr_service {
+    filter not exists {
+      graph ?da {
+        ?disapprover npx:disapprovesOf ?np .
+      }
       graph npa:graph {
         ?disapproval_np np:hasAssertion ?da ;
           npa:hasValidSignatureForPublicKey ?dpubkey .
         filter not exists { ?disapproval_npx npx:invalidates ?disapproval_np ; npa:hasValidSignatureForPublicKey ?dpubkey . }
       }
-      graph <https://w3id.org/np/RAO1cF5peSY1GO584EAUzBccCWNDdfsMPEzndjPp3rKhg/assertion> {
+      graph ?latest_curators_assertion {
         ?qpubkeys npx:hasPublicKey ?dpubkey .
       }
-      graph ?da {
-        ?disapprover npx:disapprovesOf ?np .
-      }
-    } #}
-
-  } group by ?np ?label ?date order by desc(?maxscore) }
-    
-  bind(iri(concat(?service, "repo/full")) as ?full_service)
-  optional { #service ?full_service {
-    graph npa:graph {
-      ?np np:hasAssertion ?a .
     }
-    graph ?a {
-      ?thing rdfs:comment ?description .
-    }
-  } #}
 
-  bind(iri(concat(?service, "repo/type/", sha256("http://purl.org/nanopub/x/qualifies"))) as ?qualifies_service)
-  optional { #service ?qualifies_service {
+  } group by ?np ?thing ?label ?description ?date }
+
+
+  optional {
+    graph ?qa {
+      ?qualifier npx:qualifies ?np .
+    }
     graph npa:graph {
       ?qualification_np np:hasAssertion ?qa ;
         npa:hasValidSignatureForPublicKey ?qpubkey .
       filter not exists { ?qualification_npx npx:invalidates ?qualification_np ; npa:hasValidSignatureForPublicKey ?qpubkey . }
     }
-    graph <https://w3id.org/np/RAO1cF5peSY1GO584EAUzBccCWNDdfsMPEzndjPp3rKhg/assertion> {
+    graph ?latest_curators_assertion {
       ?qpubkeys npx:hasPublicKey ?qpubkey .
     }
-    graph ?qa {
-      ?qualifier npx:qualifies ?np .
-    }
-  } #}
+  }
 
-
-  bind(iri(concat(?service, "repo/type/", sha256("https://w3id.org/fair/fip/terms/FIP-Declaration"))) as ?fip_service)
-  optional { #service ?fip_service {
+  optional {
     graph npa:graph {
+      ?decl_np npx:hasNanopubType fip:FIP-Declaration .
       ?decl_np np:hasAssertion ?decl_a ;
         npa:hasValidSignatureForPublicKey ?decl_pubkey .
       filter not exists { ?decl_npx npx:invalidates ?decl_np ; npa:hasValidSignatureForPublicKey ?decl_pubkey . }
@@ -103,6 +95,6 @@ select distinct ?np ?thing ?description ?label ?date ?types ?qualifier (group_co
       # ----
       ?decl fip:declared-by ?community .
     }
-  } #}
+  }
 
 } group by ?np ?thing ?description ?label ?date ?types ?qualifier ?maxscore order by desc(?maxscore)
