@@ -39,12 +39,32 @@ select distinct ?np ?thing ?description ?label ?date ?types ?qualifier (group_co
         filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
         ?np npx:hasNanopubType ?_type_iri .
         ?np npx:hasNanopubType ?type .
-        filter(?type != fip:FAIR-Enabling-Resource)
-        filter(?type != fip:Available-FAIR-Enabling-Resource)
-        filter(?type != fip:FAIR-Enabling-Resource-to-be-Developed)
-        filter(?type != fip:FAIR-Supporting-Resource)
-        filter(?type != fip:Available-FAIR-Supporting-Resource)
-        filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
+        values ?type {
+          fip:Authentication-and-authorization-service
+          fip:Editor
+          fip:FAIR-Representation-Service
+          fip:FAIR-Supporting-Software
+          fip:Identifier-service
+          fip:Provenance-Tracking-Service
+          fip:Registry
+          fip:Validation-Service
+          fip:Web-API
+          fip:FAIR-Specification
+          fip:Communication-protocol
+          fip:Crosswalk
+          fip:FAIR-Implementation-Profile
+          fip:Knowledge-representation-language
+          fip:Metadata-schema
+          fip:Metadata-data-linking-schema
+          fip:Provenance-model
+          fip:Semantic-model
+          fip:Structured-vocabulary
+          fip:FAIR-Data-Policy
+          fip:Data-usage-license
+          fip:Metadata-preservation-policy
+          fip:Persistency-Policy
+          fip:FAIR-Practice
+        }
         filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
       }
 
