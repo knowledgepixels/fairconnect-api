@@ -33,7 +33,6 @@ select ?type (count(distinct ?np) as ?count) where {
           fip:Registry
           fip:Validation-Service
           fip:Web-API
-          fip:FAIR-Specification
           fip:Communication-protocol
           fip:Crosswalk
           fip:FAIR-Implementation-Profile
@@ -73,7 +72,6 @@ select ?type (count(distinct ?np) as ?count) where {
           fip:Registry
           fip:Validation-Service
           fip:Web-API
-          fip:FAIR-Specification
           fip:Communication-protocol
           fip:Crosswalk
           fip:FAIR-Implementation-Profile
