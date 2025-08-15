@@ -49,7 +49,6 @@ select distinct ?np ?thing ?description ?label ?date ?types ?qualifier (group_co
           fip:Registry
           fip:Validation-Service
           fip:Web-API
-          fip:FAIR-Specification
           fip:Communication-protocol
           fip:Crosswalk
           fip:FAIR-Implementation-Profile
