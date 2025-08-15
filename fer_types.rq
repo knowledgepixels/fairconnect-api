@@ -12,13 +12,9 @@ prefix fip: <https://w3id.org/fair/fip/terms/>
 
 select ?type (count(distinct ?np) as ?count) where {
 
-  optional { <x:> <x:> ?__endpoint_iri } .
-  bind(coalesce(?__endpoint_iri, <https://query.np.trustyuri.net/repo/empty>) as ?endpoint)
-  bind(replace(str(?endpoint), "repo/[a-zA-Z0-9]+$", "") as ?service)
-
   {
 
-    bind(iri(concat(?service, "repo/type/", sha256(str(fip:FAIR-Enabling-Resource)))) as ?fer_service)
+    bind(iri(concat("https://query.np.trustyuri.net/repo/type/", sha256(str(fip:FAIR-Enabling-Resource)))) as ?fer_service)
     service ?fer_service {
       graph npa:graph {
         ?np npa:hasValidSignatureForPublicKey ?pubkey ;
@@ -27,19 +23,38 @@ select ?type (count(distinct ?np) as ?count) where {
         filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
         filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
         ?np npx:hasNanopubType ?type .
-        filter(?type != fip:FAIR-Enabling-Resource)
-        filter(?type != fip:Available-FAIR-Enabling-Resource)
-        filter(?type != fip:FAIR-Enabling-Resource-to-be-Developed)
-        filter(?type != fip:FAIR-Supporting-Resource)
-        filter(?type != fip:Available-FAIR-Supporting-Resource)
-        filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
-        filter(strstarts(str(?type), str(fip:)))
+        values ?type {
+          fip:Authentication-and-authorization-service
+          fip:Editor
+          fip:FAIR-Representation-Service
+          fip:FAIR-Supporting-Software
+          fip:Identifier-service
+          fip:Provenance-Tracking-Service
+          fip:Registry
+          fip:Validation-Service
+          fip:Web-API
+          fip:FAIR-Specification
+          fip:Communication-protocol
+          fip:Crosswalk
+          fip:FAIR-Implementation-Profile
+          fip:Knowledge-representation-language
+          fip:Metadata-schema
+          fip:Metadata-data-linking-schema
+          fip:Provenance-model
+          fip:Semantic-model
+          fip:Structured-vocabulary
+          fip:FAIR-Data-Policy
+          fip:Data-usage-license
+          fip:Metadata-preservation-policy
+          fip:Persistency-Policy
+          fip:FAIR-Practice
+        }
       }
     }
 
   } union {
 
-    bind(iri(concat(?service, "repo/type/", sha256(str(fip:FAIR-Supporting-Resource)))) as ?fer_service)
+    bind(iri(concat("https://query.np.trustyuri.net/repo/type/", sha256(str(fip:FAIR-Supporting-Resource)))) as ?fer_service)
     service ?fer_service {
       graph npa:graph {
         ?np npa:hasValidSignatureForPublicKey ?pubkey ;
@@ -48,13 +63,32 @@ select ?type (count(distinct ?np) as ?count) where {
         filter not exists { ?np npx:hasNanopubType npx:ExampleNanopub . }
         filter not exists { ?npx npx:invalidates ?np ; npa:hasValidSignatureForPublicKey ?pubkey . }
         ?np npx:hasNanopubType ?type .
-        filter(?type != fip:FAIR-Enabling-Resource)
-        filter(?type != fip:Available-FAIR-Enabling-Resource)
-        filter(?type != fip:FAIR-Enabling-Resource-to-be-Developed)
-        filter(?type != fip:FAIR-Supporting-Resource)
-        filter(?type != fip:Available-FAIR-Supporting-Resource)
-        filter(?type != fip:FAIR-Supporting-Resource-to-be-Developed)
-        filter(strstarts(str(?type), str(fip:)))
+        values ?type {
+          fip:Authentication-and-authorization-service
+          fip:Editor
+          fip:FAIR-Representation-Service
+          fip:FAIR-Supporting-Software
+          fip:Identifier-service
+          fip:Provenance-Tracking-Service
+          fip:Registry
+          fip:Validation-Service
+          fip:Web-API
+          fip:FAIR-Specification
+          fip:Communication-protocol
+          fip:Crosswalk
+          fip:FAIR-Implementation-Profile
+          fip:Knowledge-representation-language
+          fip:Metadata-schema
+          fip:Metadata-data-linking-schema
+          fip:Provenance-model
+          fip:Semantic-model
+          fip:Structured-vocabulary
+          fip:FAIR-Data-Policy
+          fip:Data-usage-license
+          fip:Metadata-preservation-policy
+          fip:Persistency-Policy
+          fip:FAIR-Practice
+        }
       }
     }
 
